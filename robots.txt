@@ -1,0 +1,10 @@
+User-Agent: *
+Disallow: /login
+Disallow: /register
+Disallow: /thank-you
+Disallow: /landing
+Disallow: /admin/
+
+Allow: /
+
+Sitemap: https://www.almufaddalboiler.com/sitemap.xml
