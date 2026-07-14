@@ -3,18 +3,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{!! $meta_title ?? 'Al Muffadal' !!}</title>
     <meta name="description" content="{!! $meta_description ?? 'Al Muffadal'!!}">
-    
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:site_name" content="AM Boilers">
+    <meta property="og:title" content="{!! $meta_title ?? 'AM Boilers | Marine & Industrial Boiler Maintenance' !!}">
+    <meta property="og:description" content="{!! $meta_description ?? 'Dubai-based engineering company delivering repair, maintenance, and fabrication solutions for boilers, HRSGs, and heat exchangers across marine and industrial sectors.' !!}">
+    <meta property="og:image" content="{{ $meta_image ?? asset('public/front/images/og-default.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="og:locale" content="en_US">
+
     @if(request()->is('privacy-policy') || request()->is('terms-conditions') || request()->is('register') || request()->is('login') || request()->is('thank-you'))
         <meta name="robots" content="noindex, nofollow">
     @else
         <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"/>
     @endif
-    
-    <link rel="canonical" href="{{ request()->url() }}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{!! $meta_title ?? 'AM Boilers' !!}">
+    <meta name="twitter:description" content="{!! $meta_description ?? 'Al Muffadal' !!}">
+    <meta name="twitter:image" content="{{ $meta_image ?? asset('public/front/images/og-default.jpg') }}">
+
+    <link rel="canonical" href="https://www.almufaddalboiler.com{{ request()->getPathInfo() }}{{ request()->getQueryString() ? '?'.request()->getQueryString() : '' }}">
 
     <link rel="icon" type="image/x-icon" href="{{ asset('public/front/images/Favicon.png')}}">
     <!-- fonts -->
@@ -71,8 +85,8 @@
 
     }
 
-        
-        
+
+
     .dropdown-wrapper {
       position: relative;
       width: 150px;
@@ -86,8 +100,8 @@
       background: transparent;
       font-size:16px!important;
     }
-    
-    
+
+
 
     .dropdown-input-lan:focus {
       outline: none;
@@ -166,36 +180,36 @@
              .header_nav{gap:16px!important;}
              .dropdown-wrapper{width:120px;}
          }
-         
-         
+
+
          .am_menu_body_link
          {
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            
-          
+
+
          }
-         
+
          .am_menu_body_link_catalogue
          {
-              
+
                padding: 1rem;
                display: flex;
                justify-content: space-between;
                align-items:center;
                border-top: 1px solid #f0f0f038;
          }
-         
+
          .am_menu_body_link_catalogue div
          {
              width:50%;
-             
+
          }
-         
+
     </style>
-    
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -220,10 +234,10 @@
     <div class="mouse-cursor cursor-inner"></div>
 
      <!--Scroll to Top Button -->
- <div class="scroll-top" id="scrollTopBtn">
+ <div class="scroll-top" id="scrollTopBtn" role="button" aria-label="Scroll to top" tabindex="0">
 
-  <svg viewBox="0 0 40 40">
-     Progress Circle 
+  <svg viewBox="0 0 40 40" aria-hidden="true">
+     <!-- Progress Circle -->
     <circle
       cx="20"
       cy="20"
@@ -234,7 +248,7 @@
       class="progress-ring"
     />
 
-     Arrow 
+     <!-- Arrow -->
     <path
       d="M20 28 L20 12 M12 20 L20 12 L28 20"
       stroke="#ffffff"
@@ -406,7 +420,15 @@
                     });
                     </script>
 
-
+            <div class="d-flex gap-2 align-items-center header_contact">
+            <a href="tel:+971529037472" class="header_call_btn" aria-label="Call us now">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="d-none d-lg-inline">+971 52 903 7472</span>
+        </a>
+        </div>
                     <!-- ðŸ”§ JavaScript Logic -->
                         <!--ymcode-->
                         <div class="language-select">
@@ -418,7 +440,7 @@
                                 </path>
                             </svg>
 
-                           
+
                                 <div class="ml-4">
                                     <div class="dropdown-wrapper notranslate">
                                     <input type="text" id="dropdownInput" class="dropdown-input-lan" placeholder="Select Language" readonly>
@@ -430,32 +452,18 @@
                                     </div>
                                   </div>
 
-                                  <div id="google_translate_element" style="display:none;"></div
+                                  <div id="google_translate_element" style="display:none;"></div>
                                 </div>
                             </div>
-                          
+
 
                         </div>
                         <!--ymcode-->
                     <!--Search Icon -->
-                    <!-- LANGUAGE ICON -->
-                    <span id="languageToggle" class="d-none"
-                        style="cursor:pointer; position: relative; display: flex;border: 1px solid #ececec;border-radius:5px;padding:2px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <path
-                                d="M16 28C18.66 27.9998 21.2446 27.1163 23.348 25.488C25.4515 23.8598 26.9546 21.5791 27.6213 19.004M16 28C13.34 27.9998 10.7554 27.1163 8.65197 25.488C6.54854 23.8598 5.04544 21.5791 4.37867 19.004M16 28C19.3133 28 22 22.6267 22 16C22 9.37334 19.3133 4 16 4M16 28C12.6867 28 10 22.6267 10 16C10 9.37334 12.6867 4 16 4M27.6213 19.004C27.868 18.044 28 17.0373 28 16C28.0033 13.9361 27.4718 11.9067 26.4573 10.1093M27.6213 19.004C24.0656 20.9752 20.0656 22.0064 16 22C11.784 22 7.82267 20.9133 4.37867 19.004M4.37867 19.004C4.12633 18.0226 3.9991 17.0133 4 16C4 13.86 4.56 11.8493 5.54267 10.1093M16 4C18.1283 3.99911 20.2186 4.56448 22.0563 5.63809C23.894 6.71169 25.4129 8.25489 26.4573 10.1093M16 4C13.8717 3.99911 11.7814 4.56448 9.94375 5.63809C8.10606 6.71169 6.58708 8.25489 5.54267 10.1093M26.4573 10.1093C23.5542 12.6239 19.8407 14.0055 16 14C12.0027 14 8.34667 12.5333 5.54267 10.1093"
-                                stroke="#172A42" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-
-                        <div class="ml-4" id="google_translate_element" class="translate-wrap">
-                            <span class="custom-placeholder" style="padding-right:90px;">Select Language</span>
-
-                        </div>
-                    </span>
                     <!-- GOOGLE TRANSLATE SCRIPT -->
                     <!-- Google Translate Widget -->
                     <script>
-                    // custom-placeholder js 
+                    // custom-placeholder js
                     if (window.innerWidth >= 768) {
                         const observer = new MutationObserver(() => {
                             const select = document.querySelector('#google_translate_element select');
@@ -473,32 +481,9 @@
                         });
                     }
                     </script>
-                    <script type="text/javascript">
-                    function googleTranslateElementInit() {
-                        new google.translate.TranslateElement({
-                            pageLanguage: 'en',
-                            includedLanguages: 'hi,bn,mr,te,ta,gu,ur,kn,or,ml,en,zh-CN,es,fr,ar,ru,pt'
-                        }, 'google_translate_element');
-                    }
-                    </script>
-                    <script type="text/javascript">
-                    function googleTranslateElementInit() {
-                        new google.translate.TranslateElement({
-                            pageLanguage: 'en'
-                        }, 'google_translate_element');
-                    }
 
-                    function toggleGoogleTranslate() {
-                        var translateElement = document.getElementById("google_translate_element");
-                        if (translateElement.style.display === "none") {
-                            translateElement.style.display = "block";
-                        } else {
-                            translateElement.style.display = "none";
-                        }
 
-                        console.log(translateElement)
-                    }
-                    </script>
+
                     <!-- Google Translate dropdown container (hidden by default) -->
                 </div>
             </div>
@@ -536,25 +521,25 @@
                             <a href="{{route('contact')}}" class="text-white">Contact Us</a>
                        </div>
                        <div>
-                           
+
                            <a href="{{ asset('public/Am_Boiler_Brochure.pdf') }}" target="_blank" class="text-white">Catalogue</a>
                        </div>
                     </div>
                 </div>
             </div>
-            
+
             @php
                 use Illuminate\Support\Facades\DB;
-            
+
                 $categories = DB::table('service_category')
                     ->whereNull('deleted_at')
                     ->get();
-            
+
                 $servicesByCategory = DB::table('services')
                     ->whereNull('deleted_at')
                     ->get()
                     ->groupBy('category_id');
-            
+
                 $categoriesWithServices = $servicesByCategory->keys()->toArray();
             @endphp
 
@@ -570,14 +555,14 @@
                     <ul>
                         @foreach($categories as $category)
                              @unless($category->url === 'marine-spares-parts')
-            
+
                             @php
                                 $hasServices = in_array($category->id, $categoriesWithServices);
                                 $url = $hasServices
                                     ? '#'
                                     : route('service.details', ['url' => $category->url]);
                             @endphp
-            
+
                             <li>
                                 <a href="{{ $url }}"
                                    @if($hasServices)
@@ -585,7 +570,7 @@
                                        data-target="menu-{{ $category->id }}"
                                    @endif
                                 >
-                                    {{ $category->name }} 
+                                    {{ $category->name }}
                                     @if($hasServices)
                                         <span>&rsaquo;</span>
                                     @endif
@@ -601,24 +586,24 @@
             @foreach($categories as $category)
 
             @if(in_array($category->id, $categoriesWithServices))
-            
+
             <div class="menu-level" id="menu-{{ $category->id }}">
                 <div class="menu-header">
                     <button class="back-btn" data-back="menu-services">&lsaquo; Back</button>
                     <h6 class="m-0">{{ $category->name }}</h6>
                 </div>
-            
+
                 <div class="menu-body">
                     <ul>
                         @foreach($servicesByCategory[$category->id] as $service)
                             <li>
                                 <a href="{{ route('service.details', ['url' => $service->url]) }}">
-                                    {{ $service->product_name }} 
+                                    {{ $service->product_name }}
                                 </a>
                             </li>
                         @endforeach
                     </ul>
-            
+
                     <div class="text-center mt-4">
                         <a href="{{ route('service', ['url' => $category->url]) }}"
                            class="main_btn d-inline-block">
@@ -630,7 +615,7 @@
                     </div>
                 </div>
             </div>
-            
+
             @endif
             @endforeach
 
@@ -731,40 +716,40 @@
     //     }
     //   });
     // }
-    
+
     function deleteGoogTransCookies() {
             // Get all cookies
             const cookies = document.cookie.split(';');
-            
+
             // Find and delete all googtrans cookies
             cookies.forEach(cookie => {
                 const cookieName = cookie.split('=')[0].trim();
                 // console.log("Cookie found first : " + cookieName);
                 if (cookieName === 'googtrans') {
                     // console.log('Found googtrans cookie, attempting to delete...');
-                    
+
                     // Try multiple deletion strategies to cover all cases
                     const hostname = window.location.hostname;
                     const domainParts = hostname.split('.');
-                    
+
                     // Delete with various path and domain combinations
                     document.cookie = 'googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                     document.cookie = 'googtrans=; path=/; domain=' + hostname + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-                    
+
                     // Try with parent domain (e.g., .example.com)
                     if (domainParts.length > 2) {
                         const parentDomain = '.' + domainParts.slice(-2).join('.');
                         document.cookie = 'googtrans=; path=/; domain=' + parentDomain + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                     }
-                    
+
                     // Also try without domain (lets browser handle it)
                     document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-                    
+
                     // console.log('Deleted googtrans cookie');
                 }
                 // console.log("Cookie found: " + cookieName);
             });
-            
+
             // Force clear by setting empty value
             document.cookie = 'googtrans=; path=/;';
         }
@@ -791,6 +776,12 @@
         autoDisplay: false
       }, 'google_translate_element');
     }
+
+      function toggleGoogleTranslate() {
+            var translateElement = document.getElementById("google_translate_element");
+            translateElement.style.display = (translateElement.style.display === "none") ? "block" : "none";
+        }
+
   </script>
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
      <!--language code ym-->
@@ -882,7 +873,7 @@
     // // Use on mouseenter/mouseleave or open/close
     // dropdown.addEventListener('mouseenter', disableBodyScroll);
     // dropdown.addEventListener('mouseleave', enableBodyScroll);
-    // 
+    //
     </script>
     <script>
 document.querySelectorAll('.next-menu').forEach(link => {
@@ -911,7 +902,3 @@ document.querySelectorAll('.back-btn').forEach(btn => {
     });
 });
 </script>
-
-
-
-

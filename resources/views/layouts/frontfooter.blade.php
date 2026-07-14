@@ -27,7 +27,7 @@
                          A Part Of
                         </p>
                         <img src="{{ asset('public/front/images/ft_apartof.svg')}}" alt="a part of " class="img-fluid ft_apart" loading="lazy">
-              
+
                 </div>
             </div>
             <div class="col-lg-2 col-md-3">
@@ -46,7 +46,7 @@
                 </ul>
 
             </div>
-            
+
             @php
                $categories = DB::table('service_category')->whereNull('deleted_at')->get();
             @endphp
@@ -59,18 +59,18 @@
             <!--       {{ $category->name }}-->
             <!--   </a>-->
             <!--</li>-->
-                        
+
             <!--       @endforeach-->
             <!--   </ul>-->
             <!--</div>-->
-            
+
             @php
                 use Illuminate\Support\Facades\DB;
-            
+
                 $categories = DB::table('service_category')
                     ->whereNull('deleted_at')
                     ->get();
-            
+
                 // Get all category IDs that have services
                 $categoriesWithServices = DB::table('services')
                     ->select('category_id')
@@ -86,11 +86,11 @@
                         <li>
                             @php
                                 $hasServices = in_array($category->id, $categoriesWithServices);
-                                $url = $hasServices 
-                                    ? route('service', ['url' => $category->url]) 
+                                $url = $hasServices
+                                    ? route('service', ['url' => $category->url])
                                     : route('service.details', ['url' => $category->url]); // You can also use '#' or some static route
                             @endphp
-            
+
                             <a href="{{ $url }}">
                                 {{ $category->name }}
                             </a>
@@ -99,15 +99,15 @@
                 </ul>
             </div>
 
-            
-            
 
-           
+
+
+
             <div class="col-lg-3 col-md-3 white_bd_left">
                 <h6 class="ft_head">Career</h6>
                 <ul class="ft_menu">
                     <li><a href="{{ route('life-at-ame') }}">Life at AME</a></li>
-                    <li><a href="{{ route('current-vacancies') }}">Current Vacancies</a></li>                
+                    <li><a href="{{ route('current-vacancies') }}">Current Vacancies</a></li>
                 </ul>
                 <h6 class="ft_head mt-4">Contact</h6>
                     <ul class="ft_menu">
@@ -122,23 +122,23 @@
                                 class="text-white">sales@almufaddal.ae</a>
                         </div>
                         <div class="d-flex gap-3 justify-content-md-start justify-content-center">
-                        <a href="https://www.linkedin.com/company/am-boilers/" target="_blank">
+                        <a href="https://www.linkedin.com/company/am-boilers/" target="_blank" rel="noopener noreferrer">
                             <img src="{{ asset('public/front/images/ft_linkedin.svg') }}" alt="linkedin" loading="lazy">
                         </a>
-                        <a href="https://x.com/almufaddalgroup" target="_blank">
+                        <a href="https://x.com/almufaddalgroup" target="_blank" rel="noopener noreferrer">
                             <img src="{{ asset('public/front/images/ft_x.svg') }}" alt="x" loading="lazy">
                         </a>
-                        <a href="https://www.facebook.com/amboilers" target="_blank">
+                        <a href="https://www.facebook.com/amboilers" target="_blank" rel="noopener noreferrer">
                             <img src="{{ asset('public/front/images/ft_fb.svg') }}" alt="facebook" loading="lazy">
                         </a>
-                        <a href="https://www.instagram.com/amboilers/" target="_blank">
+                        <a href="https://www.instagram.com/amboilers/" target="_blank" rel="noopener noreferrer">
                             <img src="{{ asset('public/front/images/ft_insta.svg') }}" alt="insta" loading="lazy">
                         </a>
                     </div>
                     </div>
-                    
+
                 </ul>
-                
+
             </div>
         </div>
     </div>
@@ -164,6 +164,52 @@
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
 
 <script src="{{ asset('public/front/js/main.js') }}"></script>
+<!-- Floating WhatsApp Button -->
+<a href="https://wa.me/971529037472?text=Hi%2C%20I%20need%20boiler%20repair%20assistance"
+   target="_blank" rel="noopener" class="floating-whatsapp" aria-label="Chat on WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.003a7.94 7.94 0 0 0 7.94-7.9 7.9 7.9 0 0 0-2.4-5.68zm-5.55 12.2h-.003a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.66.67-2.44-.16-.25a6.58 6.58 0 0 1-1.01-3.5 6.6 6.6 0 0 1 11.27-4.67 6.55 6.55 0 0 1 1.94 4.68 6.6 6.6 0 0 1-6.6 6.58zm3.6-4.94c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.62.77-.11.13-.23.15-.43.05a5.4 5.4 0 0 1-1.6-.98 5.98 5.98 0 0 1-1.1-1.37c-.12-.2 0-.3.08-.4.09-.1.2-.24.29-.35.1-.12.13-.2.2-.33.06-.13.03-.25-.02-.35-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.2-.68.66-.68 1.62 0 .95.7 1.87.8 2 .1.13 1.38 2.1 3.34 2.95.47.2.83.32 1.12.42.47.15.9.13 1.24.08.38-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.04-.09-.17-.14-.37-.24z"/>
+    </svg>
+</a>
+
+<style>
+.floating-whatsapp {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 56px;
+    height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    z-index: 999;
+    animation: wa-bounce 2.2s ease-in-out infinite;
+    transition: transform 0.2s ease;
+}
+
+.floating-whatsapp:hover {
+    color: #fff;
+    transform: scale(1.08);
+}
+
+@keyframes wa-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@media (max-width: 767.98px) {
+    .floating-whatsapp {
+        bottom: 16px;
+        right: 16px;
+        width: 50px;
+        height: 50px;
+    }
+}
+</style>
 </body>
 
 </html>

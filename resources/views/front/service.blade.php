@@ -13,21 +13,25 @@
 <section class="section-space-pt">
     <div class="ym_container">
         <div class="row g-4 g-lg-5">
-            @foreach($services as $data)
+          @foreach($services as $data)
             <div class="col-md-6 col-lg-4">
-                <div> 
-                    <img src="{{ asset('public/services/service/'.$data->service_image)}}" loading="lazy" alt="{{  str_replace(['-', '_'],' ', pathinfo($data->service_image, PATHINFO_FILENAME)) }}" class="img-fluid"> 
-                </div>
-                <div class="project_tabs_card_bot">
+                <a href="{{ route('service.details', ['url' => $data->url]) }}" class="service_card_link text-decoration-none">
                     <div>
-                        <h2>{{ $data->product_name}}</h2>
+                        <img src="{{ asset('public/services/service/'.$data->service_image)}}" loading="lazy"
+                            alt="{{ str_replace(['-', '_'],' ', pathinfo($data->service_image, PATHINFO_FILENAME)) }}"
+                            class="img-fluid">
                     </div>
+                    <div class="project_tabs_card_bot">
+                        <div>
+                            <h2>{{ $data->product_name}}</h2>
+                        </div>
                         @if($data->product_name != 'Modular Pre-Fabrication')
-                            <a href="{{ route('service.details', ['url' => $data->url]) }}" class=""> 
-                                <img src="{{ asset('public/front/images/slider_rightarrow.svg') }}" loading="lazy" alt="slider arrow" class="img-fluid"> 
-                            </a>
+                            <span>
+                                <img src="{{ asset('public/front/images/slider_rightarrow.svg') }}" loading="lazy" alt="slider arrow" class="img-fluid">
+                            </span>
                         @endif
-                </div>
+                    </div>
+                </a>
             </div>
             @endforeach
         </div>

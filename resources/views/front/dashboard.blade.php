@@ -5,7 +5,7 @@
             <picture>
                 <source media="(min-width: 765px)" srcset="{{ asset('public/front/images/hero_slide_img1.png') }}" loading="lazy"
                     type="image/webp">
-                <img src="{{ asset('public/front/images/Banner_1.jpg') }}" class="img-fluid mobile" loading="lazy"
+                <img src="{{ asset('public/front/images/Banner_1.webp') }}" class="img-fluid mobile" loading="lazy"
                     alt="Banner 1">
             </picture>
             <div class="position-absolute herobanner-content">
@@ -37,7 +37,7 @@
             <picture>
                 <source media="(min-width: 765px)" srcset="{{ asset('public/front/images/hero_slide_img2.png') }}" loading="lazy"
                     type="image/webp">
-                <img src="{{ asset('public/front/images/Banner_2.jpg') }}" class="img-fluid mobile" loading="lazy"
+                <img src="{{ asset('public/front/images/Banner_2.webp') }}" class="img-fluid mobile" loading="lazy"
                     alt="Banner 2">
             </picture>
             <div class="position-absolute herobanner-content">
@@ -67,7 +67,7 @@
             <picture>
                 <source media="(min-width: 765px)" srcset="{{ asset('public/front/images/hero_slide_img3.png') }}" loading="lazy"
                     type="image/webp">
-                <img src="{{ asset('public/front/images/Banner_3.jpg') }}" class="img-fluid mobile" loading="lazy"
+                <img src="{{ asset('public/front/images/Banner_3.webp') }}" class="img-fluid mobile" loading="lazy"
                     alt="Banner 3">
             </picture>
             <div class="position-absolute herobanner-content">
@@ -124,7 +124,7 @@
              <h2 class="main_head text-center">Engineering Excellence in Boilers & Heat Exchangers</h2>
             <div class="col-sm-12 col-lg-4" style="display:flex;align-items:center;">
                 <div class="about_left">
-                   
+
                     <img src="{{ asset('public/front/images/about_vectoer.png')}}" loading="lazy" alt="solution"
                         class="img-fluid mb-2">
                     <p><b>Over Two Decades of Trusted Boiler Maintenance</b></p>
@@ -133,7 +133,7 @@
                         pressure vessels.</p>
                     <p>Whether onboard vessels or at industrial plants, our experienced team ensures minimal downtime
                         and maximum operational efficiency.</p>
-                   
+
                 </div>
             </div>
             <div class="col-sm-12 col-lg-4 position-relative homemask">
@@ -142,20 +142,20 @@
                     <video autoplay muted loop playsinline>
                         <source src="{{ asset('public/front/images/700.mp4')}}" type="video/mp4" loading="lazy">
                     </video>
-                </div> 
+                </div>
             </div>
             <div class="col-sm-12 col-lg-4" style="display:flex;align-items:center;">
                 <div class="about_left">
                     <img src="{{ asset('public/front/images/about_vectoer.png')}}" loading="lazy" alt="solution"
                         class="img-fluid mb-2">
-                   
+
                     <p>At AM Boilers, we are committed to delivering top-tier boiler maintenance, heat exchanger
                         repairs, refractory solutions, and industrial automation to keep your operations running at peak
                         performance.</p>
                     <p>With a proven track record in the marine, oil & gas, and power plant industries, we ensure
                         reliability, safety, and efficiency in every project we undertake.</p>
                     <p>Delivering trusted solutions to marine and industrial clients worldwide.</p>
-                    
+
                 </div>
             </div>
         </div>
@@ -325,41 +325,22 @@ $services = DB::table('services')
                         Focused on excellence, efficiency, and long-term value.
                     </p>
 
-                    {{-- MOBILE --}}
-                    <div class="service_new_lt_tabs home_mobile">
-                        @foreach($services as $key=>$service)
-                        <div class="service_slide_new {{ $key==0 ? 'active' : '' }}"
-                             data-img="{{ asset('public/services/service_home_image/'.$service->service_home_image) }}" loading="lazy"
-                             data-title="{{ $service->product_name }}"
-                             data-desc="{{ strip_tags($service->product_description) }}"
-                             data-url="{{ route('service.details',['url'=>$service->url]) }}">
-                            <img class="img-fluid mb-3"
-                                 src="{{ asset('public/services/service_home_image/'.$service->service_home_image) }}" loading="lazy"
-                                 alt="{{ $service->product_name }}">
-                            <p>
-                                <a href="javascript:void(0)" class="service_new_lt_tabs_a">
-                                    {!! nl2br(e($service->product_name)) !!}
-                                </a>
-                            </p>
-                        </div>
-                        @endforeach
+                <div class="service_new_lt_tabs">
+                    @foreach($services as $key=>$service)
+                    <div class="service_slide_new {{ $key==0 ? 'active' : '' }}"
+                        data-img="{{ asset('public/services/service_home_image/'.$service->service_home_image) }}"
+                        data-title="{{ $service->product_name }}"
+                        data-desc="{{ strip_tags($service->product_description) }}"
+                        data-url="{{ route('service.details',['url'=>$service->url]) }}">
+                        <img class="img-fluid mb-3"
+                            src="{{ asset('public/services/service_home_image/'.$service->service_home_image) }}"
+                            alt="{{ $service->product_name }}" loading="lazy">
+                        <p><a href="{{ route('service.details',['url'=>$service->url]) }}" class="service_new_lt_tabs_a">
+                            {!! nl2br(e($service->product_name)) !!}
+                        </a></p>
                     </div>
-
-                    {{-- DESKTOP --}}
-                    <div class="service_new_lt_tabs home_desktop">
-                        @foreach($services as $key=>$service)
-                        <div class="service_slide_new {{ $key==0 ? 'active' : '' }}"
-                             data-img="{{ asset('public/services/service_home_image/'.$service->service_home_image) }}" loading="lazy"
-                             data-title="{{ $service->product_name }}"
-                             data-desc="{{ strip_tags($service->product_description) }}"
-                             data-url="{{ route('service.details',['url'=>$service->url]) }}">
-                            <img class="img-fluid mb-3"
-                                 src="{{ asset('public/services/service_home_image/'.$service->service_home_image) }}" loading="lazy"
-                                 alt="{{ $service->product_name }}">
-                            <p>{!! nl2br(e($service->product_name)) !!}</p>
-                        </div>
-                        @endforeach
-                    </div>
+                    @endforeach
+                </div>
 
                 </div>
             </div>
@@ -376,7 +357,7 @@ $services = DB::table('services')
                             {{ $services->first()->product_name }}
                         </a>
                         <p id="serviceDesc">
-                           
+
                         </p>
                     </div>
                 </div>
@@ -423,7 +404,7 @@ $services = DB::table('services')
                               </div>
                               <a class="readmore-btn">Read More</a>
                             </div>
-                           
+
                             <div class="mt-5">
                                 <a href="{{ route('service',['url' => 'repair-and-maintenance']) }}"
                                     class="main_btn d-inline-block">Know More
@@ -441,7 +422,7 @@ $services = DB::table('services')
                                 alt="Manufacturing of Bellows" class="img-fluid  mb-4">
                             <h2>Manufacturing of Bellows</h2>
                             <p class="mb-4">Keeping Your Equipment Running at Peak Performance</p>
-                            
+
                             <div class="readmore-box">
                               <div class="readmore-text">
                                 <p>We specialize in the custom fabrication of high-performance expansion joints and bellows,
@@ -453,8 +434,8 @@ $services = DB::table('services')
                               </div>
                               <a class="readmore-btn">Read More</a>
                             </div>
-                            
-                           
+
+
                             <div class="mt-5">
                                 <a href="{{ route('service',['url' => 'marine-expansion-joint']) }}"
                                     class="main_btn d-inline-block">Know More
@@ -508,7 +489,7 @@ $services = DB::table('services')
             <div class="col-sm-12 col-lg-6">
                 <div class="processslider">
                     @foreach ( $processdata as $data )
-                    <div class="processslide" data-img="{{ asset('public/front/images/solution_img.jpg') }}" loading="lazy"> 
+                    <div class="processslide" data-img="{{ asset('public/front/images/solution_img.jpg') }}" loading="lazy">
                         <div class="process_head">
                             <div>
                                 <h4 class="process_vector">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</h4>
@@ -534,8 +515,8 @@ $services = DB::table('services')
                 <h2 class="main_head">Delivering Results You Can Count On</h2>
             </div>
         </div>
-       
-            
+
+
                 <div class="counter_new">
                     <div class="homeresult_info">
                         <span><img class="my-3 result_info_img" src="{{ asset('public/front/images/Employees.svg')}}" loading="lazy"
@@ -547,7 +528,7 @@ $services = DB::table('services')
                     <p>Our team of 110+ dedicated professionals includes expert engineers and technicians who ensure
                         precision, safety, and reliability across every service we provide.</p>
                 </div>
-           
+
                 <div class="homeresult_info">
                     <span><img class="my-3 result_info_img" src="{{ asset('public/front/images/Client-Satisfaction.svg')}}" loading="lazy"
                         alt="counter Vector"></span>
@@ -558,8 +539,8 @@ $services = DB::table('services')
                     <p>with 98% client satisfaction rate reflects our commitment to quality, transparency, and timely
                         delivery, earning long-term trust from clients in every industry we serve.</p>
                 </div>
-          
-            
+
+
                 <div class="homeresult_info">
                     <span><img class="my-3 result_info_img" src="{{ asset('public/front/images/Projects.svg')}}" loading="lazy"
                         alt="counter Vector"></span>
@@ -571,8 +552,8 @@ $services = DB::table('services')
                         maintenance solutions. From emergency repairs to full system overhauls, we deliver results that
                         last.</p>
                 </div>
-          
-           
+
+
                 <div class="homeresult_info">
                     <span><img class="my-3 result_info_img" src="{{ asset('public/front/images/Client.svg')}}" loading="lazy"
                         alt="counter Vector"></span>
@@ -584,8 +565,8 @@ $services = DB::table('services')
                         shipping firms, industrial plants, and government sectors.</p>
                 </div>
                 </div>
-           
-       
+
+
     </div>
 </section>
 <!-- LinkedIn -->
@@ -901,10 +882,10 @@ $(document).ready(function() {
                         $(errorId).text('');
                     }
                 }
-            } 
+            }
             // else if (fieldId === 'pincode' && !/^[A-Za-z0-9\s-]+$/.test(value)) {
             //     $(errorId).text('Please enter a valid pin code');
-            // } 
+            // }
             else {
                 $(errorId).text('');
             }
@@ -928,7 +909,7 @@ $(document).ready(function() {
         // Get form values
         let firstName = $('#firstName').val().trim();
         let email = $('#email').val().trim().toLowerCase();
-        
+
         // Check blocked name
         if (blockedNames.includes(firstName.toLowerCase())) {
             $('#error-firstName').text('This name is not allowed');
@@ -939,7 +920,7 @@ $(document).ready(function() {
             $('#error-email').text('This email is blocked');
             isValid = false;
         }
-        
+
 
         if ($('#firstName').val().trim() === '') {
             $('#error-firstName').text('Please enter your full name');
@@ -974,7 +955,7 @@ $(document).ready(function() {
         // if (pin === '') {
         //     $('#error-pincode').text('Please enter your pin code');
         //     isValid = false;
-        // } 
+        // }
         // else if (!/^[A-Za-z0-9\s-]+$/.test(pin)) {
         // if (!/^[A-Za-z0-9\s-]+$/.test(pin)) {
         //     $('#error-pincode').text('Please enter a valid pin code');
@@ -1012,26 +993,6 @@ document.querySelectorAll('.readmore-btn').forEach(btn => {
     text.classList.toggle('show');
     btn.textContent = text.classList.contains('show') ? 'Read Less' : 'Read More';
   });
-});
-</script>
-
-<script>
-document.querySelectorAll('.service_slide_new').forEach(function(item){
-    item.addEventListener('click', function(){
-
-        // Active class toggle
-        document.querySelectorAll('.service_slide_new')
-            .forEach(el => el.classList.remove('active'));
-        this.classList.add('active');
-
-        // Update right side content
-        document.getElementById('serviceImage').src = this.dataset.img;
-        document.getElementById('serviceTitle').innerText = this.dataset.title;
-        document.getElementById('serviceDesc').innerText = this.dataset.desc;
-
-        // ✅ Update URL dynamically
-        document.getElementById('serviceTitle').href = this.dataset.url;
-    });
 });
 </script>
 
