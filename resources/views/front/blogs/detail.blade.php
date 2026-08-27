@@ -54,7 +54,8 @@
          <h1 class="main_h1_head">{{$blog_details->title}}</h1>
          <p class="blog_date mb-3">{{$blog_details->date ?? ''}}</p>
         <div class="row mb-4">
-             <p>{{ strip_tags(html_entity_decode($blog_details->short_description ?? '')) }}</p>
+             <!-- <p>{{ strip_tags(html_entity_decode($blog_details->short_description ?? '')) }}</p> -->
+             <div>{!! html_entity_decode($blog_details->short_description ?? '') !!}</div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-xxl-6">
