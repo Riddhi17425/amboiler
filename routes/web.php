@@ -71,6 +71,7 @@ Route::post('marine-boiler-engineer-job-detail/submit', [DashboardController::cl
 Route::get('/project', [DashboardController::class, 'project'])->name('project');
 Route::post('/project-submit', [DashboardController::class, 'projectstore'])->name('project.submit');
 Route::get('/thank-you', [DashboardController::class, 'thankyou'])->name('thank-you');
+Route::get('/thanks-for-applying', [DashboardController::class, 'thanksForApplying'])->name('thanks-for-applying');
 Route::get('/service-detail/{url}', [DashboardController::class, 'ServiceDetails'])->name('service.details');
 Route::get('/service/{url?}', [DashboardController::class, 'Service'])->name('service');
 Route::get('/search', [DashboardController::class, 'search'])->name('search');
