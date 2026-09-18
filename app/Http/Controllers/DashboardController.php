@@ -269,6 +269,14 @@ class DashboardController extends Controller
         $description=""; 
         return view('front.thank-you',compact('title','description'));
     }  
+
+    public function thanksForApplying()
+    {
+        $title="";
+        $description=""; 
+        return view('front.thanks-for-applying', compact('title','description'));
+    } 
+    
     public function Blogs()
     {
         $meta_title = 'Al Muffadal';
@@ -406,7 +414,7 @@ class DashboardController extends Controller
         }
 
         // Redirect to thank you page with success message
-        return redirect()->route('thank-you')->with('success', 'Your message has been sent successfully.');
+        return redirect()->route('thanks-for-applying')->with('success', 'Your inquiry has been sent successfully.');
         
     } catch (\Exception $e) {
         Log::error('Google Sheets API request failed: ' . $e->getMessage());
