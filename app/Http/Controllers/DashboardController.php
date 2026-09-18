@@ -28,6 +28,7 @@ use App\Mail\SendContactMailToUser;
 use App\Mail\SendMarineBoilerEngineerMailToUser;
 use App\Mail\SendProjectMailToUser;
 use DB;
+use Illuminate\Support\Facades\RateLimiter;
 
 class DashboardController extends Controller
 {
@@ -190,77 +191,112 @@ class DashboardController extends Controller
 
     
     public function ContactSubmit(Request $request)
-{
-    // Validation
-    $validated = $request->validate([
-        'firstname' => 'required',
-        'lastname' => 'required',
-        'email' => 'required|email',
-        'phone' => 'required|numeric',
-        'subject' => 'required',
-        'message' => 'nullable',
-    ]);
+    {
+        if ($request->filled('website')) {
+            return back()->withInput()->withErrors(['pot' => 'Something went Wrong']);
+        }
+        $disposableDomains = [
+            'mailinator.com', '10minutemail.com', 'guerrillamail.com',
+            'tempmail.com', 'temp-mail.org', 'throwawaymail.com',
+            'maildrop.cc', 'dispostable.com', 'getairmail.com',
+            'moakt.com', 'spamgourmet.com', 'yopmail.com',
+            'sharklasers.com', 'mailnesia.com', 'fakemail.net',
+            'emailondeck.com', 'trashmail.com', 'mintemail.com',
+            'mytemp.email', 'mailboxvip.org', 'usmailerbox.org', 'mail220v.org', 'alquilerjetskitf.com', 'aimusicfixer.com'
+        ];
+        $emailDomain = strtolower($request->input('email'));
+        $emailDomain = substr(strrchr($emailDomain, '@'), 1);
+        if (in_array($emailDomain, $disposableDomains)) {
+            return back()
+                ->withInput()
+                ->withErrors(['email' => 'Please use a valid email address.']);
+        }
+        
+        $captcha = $request->input('g-recaptcha-response');
+        if (!$captcha) {
+            return back()
+                ->withInput()
+                ->withErrors(['g-recaptcha-response' => 'Please verify that you are not a robot.']);
+        }
+
+        $key = 'contact-form:' . $request->ip(); // Users can submit the form a maximum of 3 times per IP address within a 10-minute period.
+        if (RateLimiter::tooManyAttempts($key, 3)) {
+            return back()
+                ->withInput()
+                ->withErrors(['email' => 'Too many submissions. Please try again later.']);
+        }
+        RateLimiter::hit($key, 600);
+
+        $validated = $request->validate([
+            'firstname' => ['required', 'string', 'min:2', 'max:50'],
+            'lastname'  => ['required', 'string', 'min:2', 'max:50'],
+            'email'     => ['required', 'email', 'max:100'],
+            'phone'     => ['required', 'digits_between:10,15'],
+            'subject'   => ['required', 'string', 'min:3', 'max:150'],
+            'message'   => ['nullable', 'string', 'max:100'],
+            'g-recaptcha-response' => ['required'],
+        ]);
+        
+        // Save contact in the database
+        $post = new Contact;
+        $post->firstname = $request->get('firstname');
+        $post->lastname = $request->get('lastname');
+        $post->email = $request->get('email');
+        $post->phone = $request->get('phone');
+        $post->subject = $request->get('subject');
+        $post->message = $request->filled('message') ? $request->get('message') : null;
     
-    // Save contact in the database
-    $post = new Contact;
-    $post->firstname = $request->get('firstname');
-    $post->lastname = $request->get('lastname');
-    $post->email = $request->get('email');
-    $post->phone = $request->get('phone');
-    $post->subject = $request->get('subject');
-    $post->message = $request->filled('message') ? $request->get('message') : null;
-
-    $post->save();
-
-    // Prepare sheet data to be sent to Google Sheets
-    $sheetData = [
-        'form_type' => 'Contact Form',
-        'fullname' => $validated['firstname'] . ' ' . $validated['lastname'],
-        'email' => $validated['email'],
-        'mobile' => $validated['phone'],
-        'subject' => $validated['subject'],
-        'message' => $validated['message'] ?? '',
-        'date' => now()->format('Y-m-d H:i:s'),
-    ];
-
-    try {
-        // Send data to Google Sheets via the API
-        $response = Http::timeout(30)
-            ->withHeaders([
-                'Content-Type' => 'application/json'
-            ])
-            ->post('https://script.google.com/macros/s/AKfycbxjhSdnUgShzCLkhJ6CgX02u09s8bvO4EcUyMTI4n3UwaXmfKNoAXrPL_Uv_nY6-sxZ/exec', $sheetData);
-
-        // Check if the request was successful
-        if ($response->successful()) {
-            $responseData = $response->json();
-            if (isset($responseData['status']) && $responseData['status'] === 'success') {
-                Log::info('Data successfully sent to Google Sheets', [
-                    'email' => $validated['email'],
-                    'response' => $responseData
-                ]);
+        $post->save();
+    
+        // Prepare sheet data to be sent to Google Sheets
+        $sheetData = [
+            'form_type' => 'Contact Form',
+            'fullname' => $validated['firstname'] . ' ' . $validated['lastname'],
+            'email' => $validated['email'],
+            'mobile' => $validated['phone'],
+            'subject' => $validated['subject'],
+            'message' => $validated['message'] ?? '',
+            'date' => now()->format('Y-m-d H:i:s'),
+        ];
+    
+        try {
+            // Send data to Google Sheets via the API
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'Content-Type' => 'application/json'
+                ])
+                ->post('https://script.google.com/macros/s/AKfycbxjhSdnUgShzCLkhJ6CgX02u09s8bvO4EcUyMTI4n3UwaXmfKNoAXrPL_Uv_nY6-sxZ/exec', $sheetData);
+    
+            // Check if the request was successful
+            if ($response->successful()) {
+                $responseData = $response->json();
+                if (isset($responseData['status']) && $responseData['status'] === 'success') {
+                    Log::info('Data successfully sent to Google Sheets', [
+                        'email' => $validated['email'],
+                        'response' => $responseData
+                    ]);
+                } else {
+                    Log::warning('Google Sheets API returned error', [
+                        'response' => $responseData,
+                        'email' => $validated['email']
+                    ]);
+                }
             } else {
-                Log::warning('Google Sheets API returned error', [
-                    'response' => $responseData,
+                Log::error('Google Sheets API request failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
                     'email' => $validated['email']
                 ]);
             }
-        } else {
-            Log::error('Google Sheets API request failed', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-                'email' => $validated['email']
-            ]);
+    
+            // Redirect to thank you page with success message
+            return redirect()->route('thank-you')->with('success', 'Your message has been sent successfully!');
+            
+        } catch (\Exception $e) {
+            Log::error('Google Sheets API request failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to send the message. Please try again later.');
         }
-
-        // Redirect to thank you page with success message
-        return redirect()->route('thank-you')->with('success', 'Your message has been sent successfully!');
-        
-    } catch (\Exception $e) {
-        Log::error('Google Sheets API request failed: ' . $e->getMessage());
-        return back()->with('error', 'Failed to send the message. Please try again later.');
     }
-}
 
 
     public function thankyou()
@@ -269,12 +305,12 @@ class DashboardController extends Controller
         $description=""; 
         return view('front.thank-you',compact('title','description'));
     }  
-
+    
     public function thanksForApplying()
     {
-        $title="";
-        $description=""; 
-        return view('front.thanks-for-applying', compact('title','description'));
+        $meta_title="Thank You for Applying | Al Mufaddal Boilers";
+        $meta_description="Thank you for applying to Al Mufaddal Boilers. Your job application has been submitted successfully, and our team will contact you shortly."; 
+        return view('front.thanks-for-applying', compact('meta_title','meta_description'));
     } 
     
     public function Blogs()
