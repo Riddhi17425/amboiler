@@ -18,8 +18,7 @@
                 <div class="col-lg-4 mb-4">
                     {{--<a class="blog_wrapper" href="{{ route('blog.details', ['url' => $blog->url]) }}" target="_blank">--}}
                     <a class="blog_wrapper" href="{{ route('blog', ['url' => $blog->url]) }}" target="_blank">
-                        <img src="{{ asset('public/blogs/front_image/'.$blog->front_image)}}" alt="{{  str_replace(['-', '_'],' ', pathinfo($blog->front_image, PATHINFO_FILENAME)) }}" class="img-fluid bd_radius">
-                        <div>
+                       <img src="{{ asset('public/blogs/front_image/'.$blog->front_image)}}" alt="{{ $blog->front_image_alt ?? $blog->title }}" class="img-fluid bd_radius">                        <div>
                             <p class="blog_date">{{$blog->date ?? ''}}</p>
                             <h3 class="blog_title">{{$blog->title ?? ''}}</h3>
                             <p class="blog_desc">{{ strip_tags(html_entity_decode($blog->short_description ?? '')) }}</p>

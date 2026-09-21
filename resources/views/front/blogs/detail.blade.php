@@ -62,8 +62,7 @@
                 {!! html_entity_decode($blog_details->description ?? '') !!}
             </div>
             <div class="col-lg-6 col-xxl-6 mt-3 mt-lg-auto">
-                <img src="{{ asset('public/blogs/detail_image/'.$blog_details->detail_image)}}" alt="{{  str_replace(['-', '_'],' ', pathinfo($blog_details->detail_image, PATHINFO_FILENAME)) }}" class="img-fluid bd_radius d-block ms-auto">
-            </div>
+              <img src="{{ asset('public/blogs/detail_image/'.$blog_details->detail_image)}}" alt="{{ $blog_details->detail_image_alt ?? $blog_details->title }}" class="img-fluid bd_radius d-block ms-auto">            </div>
         </div>
     </div>
 </section>
@@ -79,8 +78,7 @@
 <section class="my-3 my-lg-5">
     <div class="ym_container">
         <a href="https://almufaddalboiler.com/contact-us" target="_blank">
-          <img src="{{ asset('public/blogs/lower_banner/'.$blog_details->lower_banner)}}" alt="{{  str_replace(['-', '_'],' ', pathinfo($blog_details->lower_banner, PATHINFO_FILENAME)) }}" class="img-fluid">
-        </a>
+          <img src="{{ asset('public/blogs/lower_banner/'.$blog_details->lower_banner)}}" alt="{{ $blog_details->lower_banner_alt ?? $blog_details->title }}" class="img-fluid">        </a>
     </div>
 </section>
 <section>

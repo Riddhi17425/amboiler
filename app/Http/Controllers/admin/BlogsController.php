@@ -42,6 +42,9 @@ class BlogsController extends Controller
         $post->alt = $request->get('alt');
         $post->meta_title = $request->get('meta_title');
         $post->meta_description = $request->get('meta_description');
+        $post->front_image_alt = $request->get('front_image_alt');
+        $post->detail_image_alt = $request->get('detail_image_alt');
+        $post->lower_banner_alt = $request->get('lower_banner_alt');
        
  
         if($request->hasFile('detail_image')) {
@@ -102,6 +105,9 @@ class BlogsController extends Controller
         $post->alt = $request->get('alt');
         $post->meta_title = $request->get('meta_title');
         $post->meta_description = $request->get('meta_description');
+        $post->front_image_alt = $request->get('front_image_alt');
+        $post->detail_image_alt = $request->get('detail_image_alt');
+        $post->lower_banner_alt = $request->get('lower_banner_alt');
        
         if($request->hasFile('detail_image')) {
             $file = $request->file('detail_image');
