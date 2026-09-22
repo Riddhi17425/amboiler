@@ -17,6 +17,7 @@ class Services extends Model
         'section1' => 'array',
         'section2' => 'array',
         'section3' => 'array',
+        'sections' => 'array',
     ];
     protected $fillable = [
         'category_id',
@@ -41,6 +42,7 @@ class Services extends Model
         'section1',
         'section2',
         'section3',
+        'sections',
     ];
     public function category()
     {

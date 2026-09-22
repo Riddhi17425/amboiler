@@ -30,7 +30,7 @@
                             <option value="without">Without Category</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-md-6" id="categoryDropdown">
                         <label class="form-label">Category</label>
                         <select name="category_id" class="form-control">
@@ -69,7 +69,7 @@
                             <label class="form-label">Main Title</label>
                             <input type="text" id="main_title" name="main_title" class="form-control">
                         </div>
-                        
+
                         <div class="col-md-12">
                             <label for="description" class="form-label">Description</label>
                             <textarea id="description" name="description" class="form-control"></textarea>
@@ -94,6 +94,7 @@
                             <label for="meta_description" class="form-label">Meta Description</label>
                             <textarea id="meta_description" name="meta_description" class="form-control"></textarea>
                         </div>
+
                         <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
                             <h6 class="mb-0 fw-bold">Slider Image And Title</h6>
                         </div>
@@ -118,55 +119,45 @@
                                 <hr>
                             </div>
                         </div>
+
+                        {{-- ============================================================ --}}
+                        {{-- DYNAMIC SECTIONS (Section 1, Section 2, ... unlimited)        --}}
+                        {{-- Har section: Title, Description, Image, Image Alt Text,       --}}
+                        {{-- aur Header Image (ab har section me, sirf 1 me nahi)           --}}
+                        {{-- ============================================================ --}}
                         <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold">Section 1</h6>
+                            <h6 class="mb-0 fw-bold">Sections</h6>
                         </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Title</label>
-                            <input type="text" id="section1_title" name="section1_title" class="form-control">
-                        </div>
-                         <div class="col-md-12">
-                            <label class="form-label" for="cta_title">Description</label>
-                            <textarea id="section1_description" name="section1_description" class="form-control"></textarea>
-                        </div>
-                         <div class="col-md-12">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" id="image" name="section1_image" class="form-control">
-                        </div>
-                        <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold">Section 2</h6>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Title</label>
-                            <input type="text" id="section2_title" name="section2_title" class="form-control">
-                        </div>
-                         <div class="col-md-12">
-                            <label class="form-label" for="cta_title">Description</label>
-                           <textarea id="section2_description" name="section2_description" class="form-control"></textarea>
-                        </div>
-                         <div class="col-md-12">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" id="image" name="section2_image" class="form-control">
-                        </div>
-                        <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                            <h6 class="mb-0 fw-bold">Section 3</h6>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Title</label>
-                            <input type="text" id="section3_title" name="section3_title" class="form-control">
-                        </div>
-                         <div class="col-md-12">
-                            <label class="form-label" for="cta_title">Description</label>
-                            <textarea id="section3_description" name="section3_description" class="form-control"></textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" id="image" name="section3_image" class="form-control">
-                        </div>
-                    
-                        <div class="col-md-12">
-                            <label for="header_image" class="form-label">Header Image</label>
-                            <input type="file" id="header_image" name="header_image" class="form-control">
+                        <div id="section-container">
+                            <div class="row section-group border rounded p-3 mb-3 mx-0">
+                                <div class="col-md-12">
+                                    <span class="badge bg-secondary mb-2 section-number">Section 1</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" name="section_title[]" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Description</label>
+                                    <textarea name="section_description[]" class="form-control section-editor"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Image</label>
+                                    <input type="file" name="section_image[]" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Image Alt Text</label>
+                                    <input type="text" name="section_alt_text[]" class="form-control" placeholder="e.g. boiler inspection">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Header Image</label>
+                                    <input type="file" name="section_header_image[]" class="form-control">
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <button type="button" class="btn btn-success section-add-btn">Add More</button>
+                                    <button type="button" class="btn btn-danger section-remove-btn" disabled>Remove</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -209,51 +200,37 @@
 
 
 <script>
+function summernoteToolbar() {
+    return [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']],
+        ['insert', ['link', 'picture', 'hr']],
+        ['view', ['fullscreen', 'codeview']],
+        ['help', ['help']]
+    ];
+}
+
 $(document).ready(function() {
     $('#description,#cta_description,#product_description').summernote({
         placeholder: 'Enter Description here...',
         height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
+        toolbar: summernoteToolbar()
     });
-    $('#meta_description,#product_description').summernote({
+    $('#meta_description').summernote({
         placeholder: 'Enter Meta Description here...',
         height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
+        toolbar: summernoteToolbar()
     });
-    $('#section1_description,#section2_description,#section3_description').summernote({
-        placeholder: 'Enter Meta Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
+
+    // Initial Section 1's description editor
+    $('.section-group').first().find('.section-editor').summernote({
+        placeholder: 'Enter Section Description here...',
+        height: 250,
+        toolbar: summernoteToolbar()
     });
 
     var $modal = $('#modalCrop');
@@ -306,11 +283,6 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    ClassicEditor.create(document.querySelector('#editor'))
-        .catch(error => {
-            console.error(error);
-        });
-
     $('#myCartTable').addClass('nowrap').dataTable({
         responsive: true,
         columnDefs: [{
@@ -331,41 +303,26 @@ $(document).ready(function() {
 
 $(function() {
     $('.dropify').dropify();
-
-    var drEvent = $('#dropify-event').dropify();
-    drEvent.on('dropify.beforeClear', function(event, element) {
-        return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
-    });
-
-    drEvent.on('dropify.afterClear', function(event, element) {
-        alert('File deleted');
-    });
-
-    $('.dropify-fr').dropify({
-        messages: {
-            default: 'Glissez-déposez un fichier ici ou cliquez',
-            replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
-            remove: 'Supprimer',
-            error: 'Désolé, le fichier trop volumineux'
-        }
-    });
 });
+
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.add-more').addEventListener('click', function() {
+    document.querySelector('.add-more')?.addEventListener('click', function() {
         let row = document.querySelector('.template').cloneNode(true);
         row.classList.remove('template');
         row.style.display = 'flex';
         document.querySelector('.wattage-price-container').appendChild(row);
     });
 
-    document.querySelector('.wattage-price-container').addEventListener('click', function(e) {
+    document.querySelector('.wattage-price-container')?.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-row')) {
             e.target.closest('.wattage-price-row').remove();
         }
     });
 });
 </script>
+
 <script>
+    // ---- Slider Image And Title (unchanged) ----
     let counter = 1;
 
     document.addEventListener("click", function(e) {
@@ -373,13 +330,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const container = document.getElementById("slider-container");
             const newGroup = document.querySelector(".slider-group").cloneNode(true);
 
-            // Update input fields and IDs
             newGroup.querySelectorAll("input").forEach((input, idx) => {
                 input.value = "";
                 input.id = input.name.split('[')[0] + "_" + counter;
             });
 
-            // Enable remove button
             newGroup.querySelector(".remove-btn").disabled = false;
             container.appendChild(newGroup);
             counter++;
@@ -393,21 +348,75 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 </script>
+
+<script>
+    // ---- DYNAMIC SECTIONS: Add More / Remove ----
+    $(document).ready(function () {
+        function renumberSections() {
+            $('#section-container .section-group').each(function (index) {
+                $(this).find('.section-number').text('Section ' + (index + 1));
+            });
+        }
+
+        $(document).on('click', '.section-add-btn', function () {
+            var $last = $('#section-container .section-group').last();
+
+            // destroy summernote on the group we're about to clone (clean clone)
+            $last.find('.section-editor').summernote('destroy');
+
+            var $newGroup = $last.clone();
+
+            // reset all field values in the clone
+            $newGroup.find('input[type="text"]').val('');
+            $newGroup.find('textarea').val('');
+            $newGroup.find('input[type="file"]').val('');
+
+            // re-enable remove button, re-init summernote on both old & new
+            $newGroup.find('.section-remove-btn').prop('disabled', false);
+
+            $('#section-container').append($newGroup);
+
+            // re-init summernote on the group we destroyed
+            $last.find('.section-editor').summernote({
+                placeholder: 'Enter Section Description here...',
+                height: 250,
+                toolbar: summernoteToolbar()
+            });
+
+            // init summernote on the new group
+            $newGroup.find('.section-editor').summernote({
+                placeholder: 'Enter Section Description here...',
+                height: 250,
+                toolbar: summernoteToolbar()
+            });
+
+            renumberSections();
+        });
+
+        $(document).on('click', '.section-remove-btn', function () {
+            var $groups = $('#section-container .section-group');
+            if ($groups.length > 1) {
+                $(this).closest('.section-group').find('.section-editor').summernote('destroy');
+                $(this).closest('.section-group').remove();
+                renumberSections();
+            }
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function () {
         $('#withorwithout').on('change', function () {
             if ($(this).val() === 'without') {
                 $('#categoryDropdown').hide();
-                $('#categoryDropdown select').val(''); // Optional: clear category selection
+                $('#categoryDropdown select').val('');
             } else {
                 $('#categoryDropdown').show();
             }
         });
 
-        // Run on page load to apply correct initial visibility
         $('#withorwithout').trigger('change');
     });
 </script>
-
 
 @endpush

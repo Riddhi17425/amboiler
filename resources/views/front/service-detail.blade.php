@@ -1,8 +1,6 @@
 @include('layouts.frontheader')
 <section class="contact_banner">
     <div class="container-fluid p-0">
-        <!-- <img src="./images/privacy-policy-bg.png" alt="Privacy Policy" class="img-fluid w-100"> -->
-        <!--<div class="contact_banner_ctnt" style="background-image:url({{asset('public/services/banner/'.optional($service)->banner_image)}});" alt="{{  str_replace(['-', '_'],' ', pathinfo(optional($service)->banner_image, PATHINFO_FILENAME)) }}">-->
         <div class="contact_banner_ctnt" style="background-image:url(' {{ asset('public/front/images/services_banner.png') }}');" loading="lazy">
             <div class="breadcrumbs"> <a href="{{url('/')}}"><b>Home</b></a> > <a href="Javascript:void(0)"><b>Our Services</b></a> > <span>
                     {{$service->banner_title}}</span> </div>
@@ -26,7 +24,7 @@
 <section class="boiler_slider_main mt-5">
     <div class="boiler_slider ">
         @php
-            $sliders = $service->sliders; 
+            $sliders = $service->sliders;
         @endphp
         @foreach ($sliders as $slider)
             <div class="boiler_slide">
@@ -49,65 +47,82 @@
     </div>
 </section>
 
+{{-- ==================================================================== --}}
+{{-- DYNAMIC SECTIONS (unlimited count, was section1/section2/section3)    --}}
+{{-- Image alternates left/right, alt text and per-section header image    --}}
+{{-- are now supported.                                                    --}}
+{{-- Backward compatible: agar $service->sections khaali hai (purana       --}}
+{{-- record), to section1/2/3 se hi build kar lete hain.                   --}}
+{{-- ==================================================================== --}}
+@php
+    $sections = $service->sections;
+
+    if (empty($sections)) {
+        $sections = [];
+        foreach (['section1', 'section2', 'section3'] as $legacyKey) {
+            $legacy = $service->{$legacyKey} ?? null;
+            if (!empty($legacy) && (!empty($legacy['title']) || !empty($legacy['description']) || !empty($legacy['image']))) {
+                $sections[] = [
+                    'title'        => $legacy['title'] ?? '',
+                    'description'  => $legacy['description'] ?? '',
+                    'image'        => $legacy['image'] ?? null,
+                    'alt_text'     => $legacy['alt_text'] ?? '',
+                    'header_image' => null,
+                ];
+            }
+        }
+    }
+@endphp
+
+@if(!empty($sections))
 <section class="boiler_Inspection mt-80">
     <div class="ym_container">
         <div class="row gy-5">
-            @php
-                $section1 = $service->section1;
-            @endphp
-            <div class="col-12">
-               
-                <div class="row gy-3">
-                    <div class="col-lg-5">
-                         <h2 class="main_h1_head serv_head">{{ $section1['title'] }}</h2>
-                        <div>{!! $section1['description'] !!}</div>
-                    </div>
-                    <div class="col-lg-7">
-                        <img class=" img-fluid" src="{{asset('public/services/section1/'.$section1['image'])}}" loading="lazy" alt="{{  str_replace(['-', '_'],' ', pathinfo($section1['image'], PATHINFO_FILENAME)) }}">
-                    </div>
-                </div>
-            </div>
-            @php
-                $section2 = $service->section2;
-            @endphp
-            <div class="col-12">
-               
-                <div class="row gy-3">
-                    <div class="col-lg-7">
-                        <img class=" img-fluid" src="{{asset('public/services/section2/'.$section2['image'])}}" loading="lazy" alt="{{  str_replace(['-', '_'],' ', pathinfo($section2['image'], PATHINFO_FILENAME)) }}">
-                    </div>
-                    <div class="col-lg-5">
-                         <h2 class="main_h1_head serv_head">{{ $section2['title'] }}</h2>
-                        <div>{!! $section2['description'] !!}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @php
-                $section3 = $service->section3;
-            @endphp
-            @if(!empty($section3))
+            @foreach($sections as $index => $section)
+                @continue(empty($section['title']) && empty($section['description']) && empty($section['image']))
                 <div class="col-12">
-                    
                     <div class="row gy-3">
-                        <div class="col-lg-5">
-                            <h2 class="main_h1_head serv_head">{{ $section3['title'] ?? '' }}</h2>
-                            <div>{!! $section3['description'] ?? '' !!}</div>
-                        </div>
-                        <div class="col-lg-7">
-                            @if(!empty($section3['image']))
-                                <img class="img-fluid"
-                                     src="{{ asset('public/services/section3/' . $section3['image']) }}"
-                                     loading="lazy"
-                                     alt="{{ str_replace(['-', '_'], ' ', pathinfo($section3['image'], PATHINFO_FILENAME)) }}">
-                            @endif
-                        </div>
+                        @php
+                            $isEven = $index % 2 === 1; // 2nd, 4th... section => image on the left
+                            $altText = !empty($section['alt_text'])
+                                ? $section['alt_text']
+                                : (!empty($section['image']) ? str_replace(['-', '_'], ' ', pathinfo($section['image'], PATHINFO_FILENAME)) : '');
+                        @endphp
+
+                        @if($isEven)
+                            <div class="col-lg-7">
+                                @if(!empty($section['header_image']))
+                                    <img class="img-fluid mb-3" src="{{ asset('public/services/section_header/' . $section['header_image']) }}" loading="lazy" alt="{{ $altText }}">
+                                @endif
+                                @if(!empty($section['image']))
+                                    <img class="img-fluid" src="{{ asset('public/services/section/' . $section['image']) }}" loading="lazy" alt="{{ $altText }}">
+                                @endif
+                            </div>
+                            <div class="col-lg-5">
+                                <h2 class="main_h1_head serv_head">{{ $section['title'] ?? '' }}</h2>
+                                <div>{!! $section['description'] ?? '' !!}</div>
+                            </div>
+                        @else
+                            <div class="col-lg-5">
+                                <h2 class="main_h1_head serv_head">{{ $section['title'] ?? '' }}</h2>
+                                <div>{!! $section['description'] ?? '' !!}</div>
+                            </div>
+                            <div class="col-lg-7">
+                                @if(!empty($section['header_image']))
+                                    <img class="img-fluid mb-3" src="{{ asset('public/services/section_header/' . $section['header_image']) }}" loading="lazy" alt="{{ $altText }}">
+                                @endif
+                                @if(!empty($section['image']))
+                                    <img class="img-fluid" src="{{ asset('public/services/section/' . $section['image']) }}" loading="lazy" alt="{{ $altText }}">
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
-            @endif
+            @endforeach
         </div>
     </div>
 </section>
+@endif
 
 @if(isset($service->url) && $service->url === 'marine-spares-parts')
 <section class="text-center">
@@ -118,18 +133,14 @@
 @endif
 <section class="boiler_auxiliary mt-80">
     <div class="boiler_auxiliary_child">
-        <!-- <div class="ym_container"> -->
-        
         <div class="boiler_auxiliary_top">
             <h2 class="main_h1_head">{{$service->cta_title}}</h2>
         </div>
         <div class="boiler_auxiliary_bot">
             <div class="row justify-content-between">
                 {!! $service->cta_description !!}
-                
             </div>
         </div>
-        <!-- </div> -->
     </div>
 
 </section>
@@ -164,7 +175,5 @@
     </div>
 </section>
 @endif
-
-
 
 @include('layouts.frontfooter')
