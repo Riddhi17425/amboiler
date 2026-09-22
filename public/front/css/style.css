@@ -467,6 +467,7 @@ select:focus-visible {
     left: 5%;
     top: 25%;
     text-align: left;
+    position: absolute;
 }
 
 .hero_slide_head {

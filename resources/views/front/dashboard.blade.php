@@ -8,7 +8,7 @@
                 <img src="{{ asset('public/front/images/Banner_1.webp') }}" class="img-fluid mobile" loading="lazy"
                     alt="Banner 1">
             </picture>
-            <div class="position-absolute herobanner-content">
+            <div class="herobanner-content">
                 <div class="ym_container ">
                     <div class="hero_content">
                         <div class="row">
@@ -40,7 +40,7 @@
                 <img src="{{ asset('public/front/images/Banner_2.webp') }}" class="img-fluid mobile" loading="lazy"
                     alt="Banner 2">
             </picture>
-            <div class="position-absolute herobanner-content">
+            <div class="herobanner-content">
                 <div class="ym_container ">
                     <div class="hero_content">
                         <div class="row">
@@ -70,7 +70,7 @@
                 <img src="{{ asset('public/front/images/Banner_3.webp') }}" class="img-fluid mobile" loading="lazy"
                     alt="Banner 3">
             </picture>
-            <div class="position-absolute herobanner-content">
+            <div class="herobanner-content">
                 <div class="ym_container ">
                     <div class="hero_content">
                         <div class="row">
