@@ -2792,7 +2792,7 @@ footer {
 .boiler_auxiliary_top .main_h1_head {
     color: var(--wb-lemon);
     text-align: center;
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
 }
 
 .boiler_auxiliary_bot_lt {
