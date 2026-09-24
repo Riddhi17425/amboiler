@@ -3395,3 +3395,13 @@ form button {
     background-color: #1ebe5b;
     transform: scale(1.05);
 }
+/* image service style */
+.service-details-img {
+    height: -webkit-fill-available;
+    object-fit: cover;
+
+}
+.boiler_auxiliary_bot .row
+{
+align-items: center;
+}

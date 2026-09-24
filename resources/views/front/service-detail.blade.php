@@ -95,16 +95,16 @@
                                     <img class="img-fluid mb-3" src="{{ asset('public/services/section_header/' . $section['header_image']) }}" loading="lazy" alt="{{ $altText }}">
                                 @endif
                                 @if(!empty($section['image']))
-                                    <img class="img-fluid" src="{{ asset('public/services/section/' . $section['image']) }}" loading="lazy" alt="{{ $altText }}">
+                                    <img class="img-fluid   service-details-img" src="{{ asset('public/services/section/' . $section['image']) }}" loading="lazy" alt="{{ $altText }}">
                                 @endif
                             </div>
                             <div class="col-lg-5">
-                                <h2 class="main_h1_head serv_head">{{ $section['title'] ?? '' }}</h2>
+                                <h3 class="main_h1_head serv_head">{{ $section['title'] ?? '' }}</h3>
                                 <div>{!! $section['description'] ?? '' !!}</div>
                             </div>
                         @else
                             <div class="col-lg-5">
-                                <h2 class="main_h1_head serv_head">{{ $section['title'] ?? '' }}</h2>
+                                <h3 class="main_h1_head serv_head">{{ $section['title'] ?? '' }}</h3>
                                 <div>{!! $section['description'] ?? '' !!}</div>
                             </div>
                             <div class="col-lg-7">
@@ -112,7 +112,7 @@
                                     <img class="img-fluid mb-3" src="{{ asset('public/services/section_header/' . $section['header_image']) }}" loading="lazy" alt="{{ $altText }}">
                                 @endif
                                 @if(!empty($section['image']))
-                                    <img class="img-fluid" src="{{ asset('public/services/section/' . $section['image']) }}" loading="lazy" alt="{{ $altText }}">
+                                    <img class="img-fluid  service-details-img" src="{{ asset('public/services/section/' . $section['image']) }}" loading="lazy" alt="{{ $altText }}">
                                 @endif
                             </div>
                         @endif
