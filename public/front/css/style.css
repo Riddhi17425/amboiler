@@ -467,6 +467,7 @@ select:focus-visible {
     left: 5%;
     top: 25%;
     text-align: left;
+    position: absolute;
 }
 
 .hero_slide_head {
@@ -2791,7 +2792,7 @@ footer {
 .boiler_auxiliary_top .main_h1_head {
     color: var(--wb-lemon);
     text-align: center;
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
 }
 
 .boiler_auxiliary_bot_lt {
@@ -3393,4 +3394,14 @@ form button {
 .header_whatsapp_btn:hover {
     background-color: #1ebe5b;
     transform: scale(1.05);
+}
+/* image service style */
+.service-details-img {
+    height: -webkit-fill-available;
+    object-fit: cover;
+
+}
+.boiler_auxiliary_bot .row
+{
+align-items: center;
 }

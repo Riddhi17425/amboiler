@@ -3,327 +3,335 @@
 @section('title', 'Blog Add')
 
 @section('content')
-<div class="container-xxl">
-    <div class="row align-items-center">
-        <div class="border-0 mb-4">
-            <div
-                class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                <h3 class="fw-bold mb-0">Blog Add</h3>
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div
+                    class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Blog Add</h3>
+                </div>
             </div>
-        </div>
-    </div> <!-- Row end -->
+        </div> <!-- Row end -->
 
-    <div class="card-body">
-        <form method="post" enctype="multipart/form-data" action="{{ route('blog.store') }}">
-            @csrf
-            <div class="col-xl-12 col-lg-8">
-                <div class="card mb-3 p-3">
-                    <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                        <h6 class="mb-0 fw-bold">Blog Information</h6>
-                    </div>
-                    <div class="row g-3 align-items-center">
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" id="title" name="title" required class="form-control">
-                        </div> 
-                        <div class="col-md-6">
-                            <label class="form-label" for="status">Status</label>
-                            <select id="status" name="status" class="form-control" required>
-                                @foreach ($statuses as $status)
-                                <option value="{{ $status }}" {{ old('status', \App\Models\Blogs::STATUS_ACTIVE) === $status ? 'selected' : '' }}>{{ $status }}</option>
-                                @endforeach
-                            </select>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" action="{{ route('blog.store') }}">
+                @csrf
+                <div class="col-xl-12 col-lg-8">
+                    <div class="card mb-3 p-3">
+                        <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold">Blog Information</h6>
                         </div>
-                        <div class="col-md-6">
-                            <label for="date" class="form-label">Date</label>
-                            <input type="date" id="date" name="date" class="form-control">
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label" for="front_image">Front Image</label>
-                            <input type="file" id="front_image" name="front_image" class="form-control">
-                        </div>
-                        
-                        <div class="col-md-12">
-                            <label for="short_description" class="form-label">Short description</label>
-                            <textarea id="short_description" name="short_description" class="form-control"></textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label" for="detail_image">Detail Image</label>
-                            <input type="file" id="detail_image" name="detail_image" class="form-control">
-                        </div>
-                        <div class="col-md-12">
-                            <label for="description" class="form-label">Description</label>
-                            <textarea id="description" name="description" class="form-control"></textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="description" class="form-label">Detail Description</label>
-                            <textarea id="detail_description" name="detail_description" class="form-control"></textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label" for="lower_banner">CTA Image</label>
-                            <input type="file" id="lower_banner" name="lower_banner" class="form-control">
-                        </div>
-                        
-                        <div class="col-md-12">
-                            <label for="conclusion" class="form-label">Conclusion</label>
-                            <textarea id="conclusion" name="conclusion" class="form-control"></textarea>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label"> Url</label>
-                            <input type="text" id="url" name="url" required class="form-control">
-                        </div>
-                        <!--<div class="col-md-4">-->
-                        <!--    <label class="form-label">Alt Tag</label>-->
-                        <!--    <input type="text" id="alt" name="alt" required class="form-control">-->
-                        <!--</div>-->
-                        <div class="col-md-4">
-                            <label class="form-label">Meta Title</label>
-                            <input type="text" id="meta_title" name="meta_title" required class="form-control">
-                        </div>
-                        <div class="col-md-12">
-                            <label for="meta_description" class="form-label">Meta Description</label>
-                            <textarea id="meta_description" name="meta_description" class="form-control"></textarea>
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-6">
+                                <label class="form-label">Title</label>
+                                <input type="text" id="title" name="title" required class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="status">Status</label>
+                                <select id="status" name="status" class="form-control" required>
+                                    @foreach ($statuses as $status)
+                                        <option value="{{ $status }}"
+                                            {{ old('status', \App\Models\Blogs::STATUS_ACTIVE) === $status ? 'selected' : '' }}>
+                                            {{ $status }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" id="date" name="date" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="front_image">Front Image</label>
+                                <input type="file" id="front_image" name="front_image" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="front_image_alt">Front Image Alt Text</label>
+                                <input type="text" id="front_image_alt" name="front_image_alt" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="short_description" class="form-label">Short description</label>
+                                <textarea id="short_description" name="short_description" class="form-control"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="detail_image">Detail Image</label>
+                                <input type="file" id="detail_image" name="detail_image" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="detail_image_alt">Detail Image Alt Text</label>
+                                <input type="text" id="detail_image_alt" name="detail_image_alt" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" name="description" class="form-control"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Detail Description</label>
+                                <textarea id="detail_description" name="detail_description" class="form-control"></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="lower_banner">CTA Image</label>
+                                <input type="file" id="lower_banner" name="lower_banner" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="lower_banner_alt">CTA Image Alt Text</label>
+                                <input type="text" id="lower_banner_alt" name="lower_banner_alt" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="conclusion" class="form-label">Conclusion</label>
+                                <textarea id="conclusion" name="conclusion" class="form-control"></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label"> Url</label>
+                                <input type="text" id="url" name="url" required class="form-control">
+                            </div>
+                            <!--<div class="col-md-4">-->
+                            <!--    <label class="form-label">Alt Tag</label>-->
+                            <!--    <input type="text" id="alt" name="alt" required class="form-control">-->
+                            <!--</div>-->
+                            <div class="col-md-4">
+                                <label class="form-label">Meta Title</label>
+                                <input type="text" id="meta_title" name="meta_title" required class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label for="meta_description" class="form-label">Meta Description</label>
+                                <textarea id="meta_description" name="meta_description" class="form-control"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Save</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Save</button>
-    </form>
-</div>
-</div>
+    </div>
 @endsection
 
 @push('styles')
-<!-- Summernote CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
+    <!-- Summernote CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
 
-<!-- Cropper CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <!-- Cropper CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
-<!--plugin css file -->
-<link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/multi-select/css/multi-select.css') !!}">
-<link rel="stylesheet"
-    href="{!! asset('public/admin_public/dist/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.css') !!}">
-<link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/dropify/dist/css/dropify.min.css') !!}">
-<link rel="stylesheet"
-    href="{!! asset('public/admin_public/dist/assets/plugin/datatables/responsive.dataTables.min.css') !!}">
-<link rel="stylesheet"
-    href="{!! asset('public/admin_public/dist/assets/plugin/datatables/dataTables.bootstrap5.min.css') !!}">
+    <!--plugin css file -->
+    <link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/multi-select/css/multi-select.css') !!}">
+    <link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.css') !!}">
+    <link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/dropify/dist/css/dropify.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/datatables/responsive.dataTables.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('public/admin_public/dist/assets/plugin/datatables/dataTables.bootstrap5.min.css') !!}">
 @endpush
 
 @push('scripts')
-<!-- Summernote JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
-<!-- Cropper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<script src="{!! asset('public/admin_public/dist/assets/plugin/multi-select/js/jquery.multi-select.js') !!}"></script>
-<script src="{!! asset('public/admin_public/dist/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.js') !!}">
-</script>
-<script src="{!! asset('public/admin_public/dist/assets/bundles/dropify.bundle.js') !!}"></script>
-<script src="{!! asset('public/admin_public/dist/assets/bundles/dataTables.bundle.js') !!}"></script>
+    <!-- Summernote JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
+    <!-- Cropper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="{!! asset('public/admin_public/dist/assets/plugin/multi-select/js/jquery.multi-select.js') !!}"></script>
+    <script src="{!! asset('public/admin_public/dist/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.js') !!}"></script>
+    <script src="{!! asset('public/admin_public/dist/assets/bundles/dropify.bundle.js') !!}"></script>
+    <script src="{!! asset('public/admin_public/dist/assets/bundles/dataTables.bundle.js') !!}"></script>
 
 
-<script>
-$(document).ready(function() {
-    $('#description').summernote({
-        placeholder: 'Enter Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#short_description').summernote({
-        placeholder: 'Enter Short Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#detail_description').summernote({
-        placeholder: 'Enter detail Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#cta_image_text').summernote({
-        placeholder: 'Enter CTA Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#conclusion').summernote({
-        placeholder: 'Enter conclusion here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#meta_description').summernote({
-        placeholder: 'Enter Meta Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
+    <script>
+        $(document).ready(function() {
+            $('#description').summernote({
+                placeholder: 'Enter Description here...',
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
+            });
+            $('#short_description').summernote({
+                placeholder: 'Enter Short Description here...',
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
+            });
+            $('#detail_description').summernote({
+                placeholder: 'Enter detail Description here...',
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
+            });
+            $('#cta_image_text').summernote({
+                placeholder: 'Enter CTA Description here...',
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
+            });
+            $('#conclusion').summernote({
+                placeholder: 'Enter conclusion here...',
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
+            });
+            $('#meta_description').summernote({
+                placeholder: 'Enter Meta Description here...',
+                height: 300,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']]
+                ]
+            });
 
-    var $modal = $('#modalCrop');
-    var image = document.getElementById('image');
-    var cropper;
+            var $modal = $('#modalCrop');
+            var image = document.getElementById('image');
+            var cropper;
 
-    $("body").on("change", ".image", function(e) {
-        var files = e.target.files;
-        var done = function(url) {
-            image.src = url;
-            $modal.modal('show');
-        };
+            $("body").on("change", ".image", function(e) {
+                var files = e.target.files;
+                var done = function(url) {
+                    image.src = url;
+                    $modal.modal('show');
+                };
 
-        if (files && files.length > 0) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                done(reader.result);
-            };
-            reader.readAsDataURL(files[0]);
-        }
-    });
+                if (files && files.length > 0) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(files[0]);
+                }
+            });
 
-    $modal.on('shown.bs.modal', function() {
-        cropper = new Cropper(image, {
-            aspectRatio: 3 / 2,
-            viewMode: 3,
-        });
-    }).on('hidden.bs.modal', function() {
-        cropper.destroy();
-        cropper = null;
-    });
+            $modal.on('shown.bs.modal', function() {
+                cropper = new Cropper(image, {
+                    aspectRatio: 3 / 2,
+                    viewMode: 3,
+                });
+            }).on('hidden.bs.modal', function() {
+                cropper.destroy();
+                cropper = null;
+            });
 
-    $("#crop").click(function() {
-        canvas = cropper.getCroppedCanvas({
-            width: 400,
-            height: 400,
-        });
+            $("#crop").click(function() {
+                canvas = cropper.getCroppedCanvas({
+                    width: 400,
+                    height: 400,
+                });
 
-        canvas.toBlob(function(blob) {
-            url = URL.createObjectURL(blob);
-            var reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = function() {
-                var base64data = reader.result;
-                $modal.modal('hide');
-                $('#cropped_image').val(base64data);
-            };
-        });
-    });
-});
-
-$(document).ready(function() {
-    ClassicEditor.create(document.querySelector('#editor'))
-        .catch(error => {
-            console.error(error);
+                canvas.toBlob(function(blob) {
+                    url = URL.createObjectURL(blob);
+                    var reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function() {
+                        var base64data = reader.result;
+                        $modal.modal('hide');
+                        $('#cropped_image').val(base64data);
+                    };
+                });
+            });
         });
 
-    $('#myCartTable').addClass('nowrap').dataTable({
-        responsive: true,
-        columnDefs: [{
-            targets: [-1, -3],
-            className: 'dt-body-right'
-        }]
-    });
+        $(document).ready(function() {
+            ClassicEditor.create(document.querySelector('#editor'))
+                .catch(error => {
+                    console.error(error);
+                });
 
-    $('.deleterow').on('click', function() {
-        var tablename = $(this).closest('table').DataTable();
-        tablename.row($(this).parents('tr')).remove().draw();
-    });
+            $('#myCartTable').addClass('nowrap').dataTable({
+                responsive: true,
+                columnDefs: [{
+                    targets: [-1, -3],
+                    className: 'dt-body-right'
+                }]
+            });
 
-    $('#optgroup').multiSelect({
-        selectableOptgroup: true
-    });
-});
+            $('.deleterow').on('click', function() {
+                var tablename = $(this).closest('table').DataTable();
+                tablename.row($(this).parents('tr')).remove().draw();
+            });
 
-$(function() {
-    $('.dropify').dropify();
+            $('#optgroup').multiSelect({
+                selectableOptgroup: true
+            });
+        });
 
-    var drEvent = $('#dropify-event').dropify();
-    drEvent.on('dropify.beforeClear', function(event, element) {
-        return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
-    });
+        $(function() {
+            $('.dropify').dropify();
 
-    drEvent.on('dropify.afterClear', function(event, element) {
-        alert('File deleted');
-    });
+            var drEvent = $('#dropify-event').dropify();
+            drEvent.on('dropify.beforeClear', function(event, element) {
+                return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+            });
 
-    $('.dropify-fr').dropify({
-        messages: {
-            default: 'Glissez-déposez un fichier ici ou cliquez',
-            replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
-            remove: 'Supprimer',
-            error: 'Désolé, le fichier trop volumineux'
-        }
-    });
-});
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.add-more').addEventListener('click', function() {
-        let row = document.querySelector('.template').cloneNode(true);
-        row.classList.remove('template');
-        row.style.display = 'flex';
-        document.querySelector('.wattage-price-container').appendChild(row);
-    });
+            drEvent.on('dropify.afterClear', function(event, element) {
+                alert('File deleted');
+            });
 
-    document.querySelector('.wattage-price-container').addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-row')) {
-            e.target.closest('.wattage-price-row').remove();
-        }
-    });
-});
-</script>
+            $('.dropify-fr').dropify({
+                messages: {
+                    default: 'Glissez-déposez un fichier ici ou cliquez',
+                    replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+                    remove: 'Supprimer',
+                    error: 'Désolé, le fichier trop volumineux'
+                }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.add-more').addEventListener('click', function() {
+                let row = document.querySelector('.template').cloneNode(true);
+                row.classList.remove('template');
+                row.style.display = 'flex';
+                document.querySelector('.wattage-price-container').appendChild(row);
+            });
+
+            document.querySelector('.wattage-price-container').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-row')) {
+                    e.target.closest('.wattage-price-row').remove();
+                }
+            });
+        });
+    </script>
 @endpush

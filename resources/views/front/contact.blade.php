@@ -215,50 +215,96 @@
                                 Have a question, need assistance, or want to explore how we can collaborate? Our team is just a message away. Whether it's within office hours or beyond, we’re here for you — available 24×7 to ensure your business never stops. Reach out via phone, email, or the contact form below. We’ll respond promptly.
                             </p>
                         </div>
+                        <div style="position:absolute; left:-9999px; opacity:0; height:0; overflow:hidden;">
+                            <input type="text" name="website" value="" tabindex="-1" autocomplete="new-password" aria-hidden="true" >
+                        </div>
+                        @error('pot')
+                            <label class="error">{{ $message }}</label>
+                        @enderror
+                        <!--@if(session('error'))-->
+                        <!--    <div class="alert alert-danger">-->
+                        <!--        {{ session('error') }}-->
+                        <!--    </div>-->
+                        <!--@endif-->
+
                             @csrf
                             <div class="row">
                                 <div class="col-lg-6 form_item">
                                     <label for="firstName">First name *:</label><br>
                                     <input type="text" id="firstName" name="firstname" maxlength="50"
+                                        value="{{ old('firstname') }}"
                                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ').trimStart();"
                                         placeholder="First name">
-                                    <span class="error" id="error-firstName"></span>
+                                    @error('firstname')
+                                        <label class="error">{{ $message }}</label>
+                                    @enderror
                                 </div>
+                            
                                 <div class="col-lg-6 form_item">
                                     <label for="lastName">Last name *:</label><br>
                                     <input type="text" id="lastName" name="lastname" maxlength="50"
+                                        value="{{ old('lastname') }}"
                                         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ').trimStart();"
                                         placeholder="Last name">
-                                    <span class="error" id="error-lastName"></span>
+                                    @error('lastname')
+                                        <label class="error">{{ $message }}</label>
+                                    @enderror
                                 </div>
+                            
                                 <div class="col-lg-12 form_item">
                                     <label for="email">Email *:</label><br>
-                                    <input type="email" id="email" name="email" maxlength="60" placeholder="Your Email ID">
-                                    <span class="error" id="error-email"></span>
+                                    <input type="email" id="email" name="email" maxlength="60"
+                                        value="{{ old('email') }}"
+                                        placeholder="Your Email ID">
+                                    @error('email')
+                                        <label class="error">{{ $message }}</label>
+                                    @enderror
                                 </div>
+                            
                                 <div class="col-lg-12 form_item">
                                     <label for="phone">Phone number *:</label><br>
                                     <input type="tel" id="phone" name="phone" maxlength="15" minlength="10"
+                                        value="{{ old('phone') }}"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 15);"
-                                    placeholder="Your Contact No." pattern="\d{10,15}" title="Phone number must be between 10 to 15 digits">
-                                    <span class="error" id="error-phone"></span>
+                                        placeholder="Your Contact No."
+                                        pattern="\d{10,15}"
+                                        title="Phone number must be between 10 to 15 digits">
+                                    @error('phone')
+                                        <label class="error">{{ $message }}</label>
+                                    @enderror
                                 </div>
+                            
                                 <div class="col-lg-12 form_item">
                                     <label for="subject">Subject *:</label><br>
-                                    <input type="text" id="subject" name="subject" maxlength="50" placeholder="Subject">
-                                    <span class="error" id="error-subject"></span>
+                                    <input type="text" id="subject" name="subject" maxlength="50"
+                                        value="{{ old('subject') }}"
+                                        placeholder="Subject">
+                                    @error('subject')
+                                        <label class="error">{{ $message }}</label>
+                                    @enderror
                                 </div>
+                            
                                 <div class="col-lg-12 form_item">
                                     <label for="message">Message :</label><br>
-                                    <textarea id="message" name="message" maxlength="100" placeholder="Message"></textarea>
-                                    <!--<span class="error" id="error-message"></span>-->
+                                    <textarea id="message" name="message" maxlength="100"
+                                        placeholder="Message">{{ old('message') }}</textarea>
+                                    @error('message')
+                                        <label class="error">{{ $message }}</label>
+                                    @enderror
                                 </div>
+                            
                                 <div class="col-lg-12">
                                     <div class="form_item">
-                                        <div class="g-recaptcha" data-sitekey="6LfTLWAsAAAAADlJboKj1mvD4P2RsAQaSex8CYMp" data-callback="recaptchaVerified"></div>
-                                        <div id="recaptcha-error" class="error-message" style="color: red; margin-top: 5px;"></div>
+                                        <div class="g-recaptcha"
+                                            data-sitekey="6LfTLWAsAAAAADlJboKj1mvD4P2RsAQaSex8CYMp"
+                                            data-callback="recaptchaVerified">
+                                        </div>
+                            
+                                        <div id="recaptcha-error" class="error-message"
+                                            style="color: red; margin-top: 5px;"></div>
+                            
                                         @error('g-recaptcha-response')
-                                        <span class="text-danger">{{ $message }}</span>
+                                            <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
@@ -294,132 +340,222 @@ function recaptchaVerified() {
 $(document).ready(function () {
     const blurredFields = {};
 
-    $('#contactform input, #contactform textarea').on('input', function () {
-        let fieldId = $(this).attr('id');
-        let errorId = '#error-' + fieldId;
-        let value = $(this).val().trim();
+    // $('#contactform input, #contactform textarea').on('input', function () {
+    //     let fieldId = $(this).attr('id');
+    //     let errorId = '#error-' + fieldId;
+    //     let value = $(this).val().trim();
 
-        // Skip phone/email format validation until blur
-        if ((fieldId === 'phone' || fieldId === 'email') && !blurredFields[fieldId]) {
-            $(errorId).text('');
-            return;
-        }
+    //     // Skip phone/email format validation until blur
+    //     if ((fieldId === 'phone' || fieldId === 'email') && !blurredFields[fieldId]) {
+    //         $(errorId).text('');
+    //         return;
+    //     }
 
-        if (value === '') {
-            switch (fieldId) {
-                case 'firstName':
-                    $(errorId).text('Please enter your first name');
-                    break;
-                case 'lastName':
-                    $(errorId).text('Please enter your last name');
-                    break;
-                case 'phone':
-                    $(errorId).text('Please enter your phone number');
-                    break;
-                case 'email':
-                    $(errorId).text('Please enter your email');
-                    break;
-                case 'subject':
-                    $(errorId).text('Please enter your subject');
-                    break;
-                // Removed 'message' case
-            }
-        } else {
-            if (fieldId === 'phone') {
-                if (!/^\d{10,15}$/.test(value)) {
-                    $(errorId).text('Phone number must be between 10 to 15 digits');
-                } else {
-                    $(errorId).text('');
+    //     if (value === '') {
+    //         switch (fieldId) {
+    //             case 'firstName':
+    //                 $(errorId).text('Please enter your first name');
+    //                 break;
+    //             case 'lastName':
+    //                 $(errorId).text('Please enter your last name');
+    //                 break;
+    //             case 'phone':
+    //                 $(errorId).text('Please enter your phone number');
+    //                 break;
+    //             case 'email':
+    //                 $(errorId).text('Please enter your email');
+    //                 break;
+    //             case 'subject':
+    //                 $(errorId).text('Please enter your subject');
+    //                 break;
+    //             // Removed 'message' case
+    //         }
+    //     } else {
+    //         if (fieldId === 'phone') {
+    //             if (!/^\d{10,15}$/.test(value)) {
+    //                 $(errorId).text('Phone number must be between 10 to 15 digits');
+    //             } else {
+    //                 $(errorId).text('');
+    //             }
+    //         } else if (fieldId === 'email') {
+    //             if (!/^\S+@\S+\.\S+$/.test(value)) {
+    //                 $(errorId).text('Please enter a valid email');
+    //             } else {
+    //                 let domain = value.split('@')[1].toLowerCase();
+    //                 if (disposableDomains.includes(domain)) {
+    //                     $(errorId).text('Invalid email addresses are not allowed');
+    //                 } else {
+    //                     $(errorId).text('');
+    //                 }
+    //             }
+    //         } else {
+    //             $(errorId).text('');
+    //         }
+    //     }
+    // });
+
+    // $('#contactform input, #contactform textarea').on('blur', function () {
+    //     let fieldId = $(this).attr('id');
+    //     blurredFields[fieldId] = true;
+    //     $(this).trigger('input');
+    // });
+    
+    $('#contactform').validate({
+        ignore: [],
+        rules: {
+            firstname: {
+                required: true,
+                minlength: 2,
+                maxlength: 50,
+                normalizer: function(value) {
+                    return $.trim(value);
                 }
-            } else if (fieldId === 'email') {
-                if (!/^\S+@\S+\.\S+$/.test(value)) {
-                    $(errorId).text('Please enter a valid email');
-                } else {
-                    let domain = value.split('@')[1].toLowerCase();
-                    if (disposableDomains.includes(domain)) {
-                        $(errorId).text('Invalid email addresses are not allowed');
-                    } else {
-                        $(errorId).text('');
-                    }
+            },
+            lastname: {
+                required: true,
+                minlength: 2,
+                maxlength: 50,
+                normalizer: function(value) {
+                    return $.trim(value);
                 }
-            } else {
-                $(errorId).text('');
+            },
+            phone: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 15
+            },
+            email: {
+                required: true,
+                email: true,
+                maxlength: 100
+            },
+            subject: {
+                required: true,
+                minlength: 3,
+                maxlength: 150,
+                normalizer: function(value) {
+                    return $.trim(value);
+                }
             }
-        }
-    });
-
-    $('#contactform input, #contactform textarea').on('blur', function () {
-        let fieldId = $(this).attr('id');
-        blurredFields[fieldId] = true;
-        $(this).trigger('input');
-    });
-
-    $('#contactform').on('submit', function (e) {
-        e.preventDefault();
-        let isValid = true;
-
-        $('.error').text('');
-
-        if ($('#firstName').val().trim() === '') {
-            $('#error-firstName').text('Please enter your first name');
-            isValid = false;
-        }
-
-        if ($('#lastName').val().trim() === '') {
-            $('#error-lastName').text('Please enter your last name');
-            isValid = false;
-        }
-
-        let phone = $('#phone').val().trim();
-        if (phone === '') {
-            $('#error-phone').text('Please enter your phone number');
-            isValid = false;
-        } else if (!/^\d{10,15}$/.test(phone)) {
-            $('#error-phone').text('Phone number must be between 10 to 15 digits');
-            isValid = false;
-        }
-
-        let email = $('#email').val().trim();
-        if (email === '') {
-            $('#error-email').text('Please enter your email');
-            isValid = false;
-        } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-            $('#error-email').text('Please enter a valid email');
-            isValid = false;
-        } else {
-            let domain = email.split('@')[1].toLowerCase();
-            if (disposableDomains.includes(domain)) {
-                $('#error-email').text('Invalid email addresses are not allowed');
-                isValid = false;
+        },
+    
+        messages: {
+            firstname: {
+                required: "Please enter your first name",
+                minlength: "First name must be at least 2 characters",
+                maxlength: "First name cannot exceed 50 characters"
+            },
+    
+            lastname: {
+                required: "Please enter your last name",
+                minlength: "Last name must be at least 2 characters",
+                maxlength: "Last name cannot exceed 50 characters"
+            },
+    
+            phone: {
+                required: "Please enter your phone number",
+                digits: "Please enter digits only",
+                minlength: "Phone number must be at least 10 digits",
+                maxlength: "Phone number cannot exceed 15 digits"
+            },
+    
+            email: {
+                required: "Please enter your email",
+                email: "Please enter a valid email address",
+                maxlength: "Email cannot exceed 100 characters"
+            },
+    
+            subject: {
+                required: "Please enter your subject",
+                minlength: "Subject must be at least 3 characters",
+                maxlength: "Subject cannot exceed 150 characters"
             }
-        }
-
-        if ($('#subject').val().trim() === '') {
-            $('#error-subject').text('Please enter your subject');
-            isValid = false;
-        }
-
-        // Removed message validation
-
-        if (grecaptcha.getResponse() === '') {
-            $('#recaptcha-error').text('Please verify that you are not a robot');
-            isValid = false;
-        }
-
-        if (isValid) {
-            const submitBtn = $(this).find('button[type="submit"]');
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        },
+        
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+        },
+        
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+            if (grecaptcha.getResponse() === '') {
+                $('#recaptcha-error').text('Please verify that you are not a robot');
+                return false;
+            }
+            $('#recaptcha-error').text('');
+            const submitBtn = $(form).find('button[type="submit"]');
             submitBtn.prop('disabled', true).text('Submitting...');
-            this.submit();
+            form.submit();
         }
     });
+
+
+
+    // $('#contactform').on('submit', function (e) {
+    //     e.preventDefault();
+    //     let isValid = true;
+
+    //     $('.error').text('');
+
+    //     if ($('#firstName').val().trim() === '') {
+    //         $('#error-firstName').text('Please enter your first name');
+    //         isValid = false;
+    //     }
+
+    //     if ($('#lastName').val().trim() === '') {
+    //         $('#error-lastName').text('Please enter your last name');
+    //         isValid = false;
+    //     }
+
+    //     let phone = $('#phone').val().trim();
+    //     if (phone === '') {
+    //         $('#error-phone').text('Please enter your phone number');
+    //         isValid = false;
+    //     } else if (!/^\d{10,15}$/.test(phone)) {
+    //         $('#error-phone').text('Phone number must be between 10 to 15 digits');
+    //         isValid = false;
+    //     }
+
+    //     let email = $('#email').val().trim();
+    //     if (email === '') {
+    //         $('#error-email').text('Please enter your email');
+    //         isValid = false;
+    //     } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+    //         $('#error-email').text('Please enter a valid email');
+    //         isValid = false;
+    //     } else {
+    //         let domain = email.split('@')[1].toLowerCase();
+    //         if (disposableDomains.includes(domain)) {
+    //             $('#error-email').text('Invalid email addresses are not allowed');
+    //             isValid = false;
+    //         }
+    //     }
+
+    //     if ($('#subject').val().trim() === '') {
+    //         $('#error-subject').text('Please enter your subject');
+    //         isValid = false;
+    //     }
+
+    //     // Removed message validation
+
+    //     if (grecaptcha.getResponse() === '') {
+    //         $('#recaptcha-error').text('Please verify that you are not a robot');
+    //         isValid = false;
+    //     }
+
+    //     if (isValid) {
+    //         const submitBtn = $(this).find('button[type="submit"]');
+    //         submitBtn.prop('disabled', true).text('Submitting...');
+    //         this.submit();
+    //     }
+    // });
 });
 </script>
-
-<style>
-    .error {
-        color: red;
-        font-size: 14px;
-    }
-</style>
 
 

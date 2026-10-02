@@ -17,14 +17,15 @@ class ServicesController extends Controller
     public function create()
     {
         $categories = ServiceCategory::all();
-        return view('admin.services.addservices',compact('categories'));
+        return view('admin.services.addservices', compact('categories'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'banner_title' => 'nullable|string|max:255',
         ]);
-        
+
         $productImagePath = null;
         if ($request->hasFile('product_image')) {
             $file = $request->file('product_image');
@@ -33,7 +34,7 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $productImagePath = $filename;
         }
-        
+
         $headerImagePath = null;
         if ($request->hasFile('header_image')) {
             $file = $request->file('header_image');
@@ -42,7 +43,7 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $headerImagePath = $filename;
         }
-        
+
         $servicehomeImagePath = null;
         if ($request->hasFile('service_home_image')) {
             $file = $request->file('service_home_image');
@@ -51,7 +52,7 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $servicehomeImagePath = $filename;
         }
-        
+
         $serviceImagePath = null;
         if ($request->hasFile('service_image')) {
             $file = $request->file('service_image');
@@ -68,7 +69,7 @@ class ServicesController extends Controller
             $filename = $file->getClientOriginalName();
             $path = public_path('/services/banner');
             $file->move($path, $filename);
-            $bannerImagePath =  $filename;
+            $bannerImagePath = $filename;
         }
 
         // Handle Slider JSON array
@@ -87,46 +88,8 @@ class ServicesController extends Controller
             }
         }
 
-        $section1ImagePath = null;
-        if ($request->hasFile('section1_image')) {
-            $file = $request->file('section1_image');
-            $filename = $file->getClientOriginalName();
-            $path = public_path('/services/section1');
-            $file->move($path, $filename);
-            $section1ImagePath =  $filename;
-        }
-        $section2ImagePath = null;
-        if ($request->hasFile('section2_image')) {
-            $file = $request->file('section2_image');
-            $filename = $file->getClientOriginalName();
-            $path = public_path('/services/section2');
-            $file->move($path, $filename);
-            $section2ImagePath =  $filename;
-        }
-        $section3ImagePath = null;
-        if ($request->hasFile('section3_image')) {
-            $file = $request->file('section3_image');
-            $filename = $file->getClientOriginalName();
-            $path = public_path('/services/section3');
-            $file->move($path, $filename);
-            $section3ImagePath =  $filename;
-        }
-
-        $section1 = [
-            'title' => $request->input('section1_title'),
-            'description' => $request->input('section1_description'),
-            'image' => $section1ImagePath,
-        ];
-        $section2 = [
-            'title' => $request->input('section2_title'),
-            'description' => $request->input('section2_description'),
-            'image' => $section2ImagePath,
-        ];
-        $section3 = [
-            'title' => $request->input('section3_title'),
-            'description' => $request->input('section3_description'),
-            'image' => $section3ImagePath,
-        ];
+        // === Dynamic Sections (unlimited, replaces section1/section2/section3) ===
+        $sections = $this->buildSectionsFromRequest($request);
 
         Services::create([
             'category_id' => $request->category_id,
@@ -144,11 +107,9 @@ class ServicesController extends Controller
             'meta_description' => $request->meta_description,
             'product_image' => $productImagePath,
             'banner_image' => $bannerImagePath,
-            'sliders' =>  $sliders,
-            'section1' => $section1,
-            'section2' => $section2,
-            'section3' => $section3,
-            'header_image' =>  $headerImagePath,
+            'sliders' => $sliders,
+            'sections' => $sections,
+            'header_image' => $headerImagePath,
             'service_image' => $serviceImagePath,
             'service_home_image' => $servicehomeImagePath,
         ]);
@@ -160,7 +121,7 @@ class ServicesController extends Controller
     {
         $categories = ServiceCategory::all();
         $data = Services::find($id);
-        return view('admin.services.editservices', compact('data','categories'));
+        return view('admin.services.editservices', compact('data', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -168,9 +129,9 @@ class ServicesController extends Controller
         $request->validate([
             'banner_title' => 'nullable|string|max:255',
         ]);
-    
+
         $service = Services::findOrFail($id);
-        
+
         $productImagePath = $service->product_image;
         if ($request->hasFile('product_image')) {
             $file = $request->file('product_image');
@@ -179,7 +140,7 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $productImagePath = $filename;
         }
-        
+
         $headerImagePath = $service->header_image;
         if ($request->hasFile('header_image')) {
             $file = $request->file('header_image');
@@ -188,7 +149,7 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $headerImagePath = $filename;
         }
-        
+
         $serviceImagePath = $service->service_image;
         if ($request->hasFile('service_image')) {
             $file = $request->file('service_image');
@@ -197,8 +158,8 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $serviceImagePath = $filename;
         }
-        
-         $servicehomeImagePath = $service->service_home_image;
+
+        $servicehomeImagePath = $service->service_home_image;
         if ($request->hasFile('service_home_image')) {
             $file = $request->file('service_home_image');
             $filename = $file->getClientOriginalName();
@@ -207,14 +168,6 @@ class ServicesController extends Controller
             $servicehomeImagePath = $filename;
         }
 
-        if ($request->hasFile('banner_image')) {
-            $file = $request->file('banner_image');
-            $filename = $file->getClientOriginalName();
-            $path = public_path('/services/banner');
-            $file->move($path, $filename);
-            $bannerImagePath = $filename;
-        }
-        
         // === Update Banner Image ===
         $bannerImagePath = $service->banner_image;
         if ($request->hasFile('banner_image')) {
@@ -224,16 +177,16 @@ class ServicesController extends Controller
             $file->move($path, $filename);
             $bannerImagePath = $filename;
         }
-        
+
         // === Update Slider Images ===
         $sliders = [];
         $sliderImages = $request->file('slider_image', []);
         $oldSliderImages = $request->old_slider_image ?? [];
         $sliderTexts = $request->slider_text ?? [];
         $altTags = $request->alt_tag ?? [];
-    
+
         $total = max(count($sliderTexts), count($altTags), count($oldSliderImages), count($sliderImages));
-    
+
         for ($i = 0; $i < $total; $i++) {
             if (isset($sliderImages[$i])) {
                 $file = $sliderImages[$i];
@@ -244,7 +197,7 @@ class ServicesController extends Controller
             } else {
                 $image = $oldSliderImages[$i] ?? null;
             }
-    
+
             if ($image) {
                 $sliders[] = [
                     'image' => $image,
@@ -253,60 +206,15 @@ class ServicesController extends Controller
                 ];
             }
         }
-    
-        // === Section 1 ===
-        $section1 = $service->section1 ?? [];
-        if ($request->hasFile('section1_image')) {
-            $file = $request->file('section1_image');
-            $filename = $file->getClientOriginalName();
-            $path = public_path('/services/section1');
-            $file->move($path, $filename);
-            $section1['image'] = $filename;
-        }
-        $section1['title'] = $request->input('section1_title');
-        $section1['description'] = $request->input('section1_description');
-    
-        // === Section 2 ===
-        $section2 = $service->section2 ?? [];
-        if ($request->hasFile('section2_image')) {
-            $file = $request->file('section2_image');
-            $filename = $file->getClientOriginalName();
-            $path = public_path('/services/section2');
-            $file->move($path, $filename);
-            $section2['image'] = $filename;
-        }
-        $section2['title'] = $request->input('section2_title');
-        $section2['description'] = $request->input('section2_description');
-    
-        // === Section 3 ===
-            $section3 = $service->section3 ?? [];
 
-            if (!$request->hasFile('section3_image')) {
-                $section3['image'] = null;  
-            } else {
-                
-                $file = $request->file('section3_image');
-                $filename = $file->getClientOriginalName();
-                $path = public_path('/services/section3');
-                $file->move($path, $filename);
-                $section3['image'] = $filename;
-            }
-            
-            
-            $section3['title'] = $request->input('section3_title') ?: null;
-            $section3['description'] = $request->input('section3_description') ?: null;
-            
-            
-            if (!$section3['title'] && !$section3['description']) {
-                $section3 = null; 
-            }
-      
-    
+        // === Dynamic Sections (unlimited, replaces section1/section2/section3) ===
+        $sections = $this->buildSectionsFromRequest($request, keepOldOnNoFile: true);
+
         // === Update the service ===
         $service->update([
             'category_id' => $request->category_id,
             'banner_title' => $request->banner_title,
-            'header_image' =>  $headerImagePath,
+            'header_image' => $headerImagePath,
             'service_image' => $serviceImagePath,
             'main_title' => $request->main_title,
             'footer_title' => $request->footer_title,
@@ -323,11 +231,9 @@ class ServicesController extends Controller
             'banner_image' => $bannerImagePath,
             'service_home_image' => $servicehomeImagePath,
             'sliders' => $sliders,
-            'section1' => $section1,
-            'section2' => $section2,
-            'section3' => $section3,
+            'sections' => $sections,
         ]);
-    
+
         return redirect('/admin/services')->with('success', 'Services Updated Successfully');
     }
 
@@ -335,9 +241,73 @@ class ServicesController extends Controller
     {
         $data = Services::find($id);
         if ($data) {
-        $data->delete();
-        return redirect()->back()->with('success', 'Your Services Has Been Deleted Successfully!');
+            $data->delete();
+            return redirect()->back()->with('success', 'Your Services Has Been Deleted Successfully!');
         }
         return redirect()->back()->with('error', 'Services not found!');
+    }
+
+    /**
+     * Build the dynamic "sections" array from the submitted request.
+     *
+     * Reads section_title[], section_description[], section_alt_text[],
+     * section_image[] (files) and section_header_image[] (files).
+     * On update, old_section_image[] / old_section_header_image[] hidden
+     * fields let us keep the previously uploaded file when no new file
+     * was chosen for that particular row.
+     */
+    private function buildSectionsFromRequest(Request $request, bool $keepOldOnNoFile = false): array
+    {
+        $titles       = $request->input('section_title', []);
+        $descriptions = $request->input('section_description', []);
+        $altTexts     = $request->input('section_alt_text', []);
+        $images       = $request->file('section_image', []);
+        $headerImages = $request->file('section_header_image', []);
+        $oldImages    = $request->input('old_section_image', []);
+        $oldHeaderImages = $request->input('old_section_header_image', []);
+
+        $total = count($titles);
+        $sections = [];
+
+        for ($i = 0; $i < $total; $i++) {
+            // skip a totally empty row (no title/description/files) so blank
+            // "Add More" rows that were never filled in don't get saved
+            $hasTitle = !empty($titles[$i]);
+            $hasDescription = !empty($descriptions[$i]);
+            $hasImage = isset($images[$i]) && $images[$i];
+            $hasOldImage = $keepOldOnNoFile && !empty($oldImages[$i]);
+
+            if (!$hasTitle && !$hasDescription && !$hasImage && !$hasOldImage) {
+                continue;
+            }
+
+            // section image
+            if (isset($images[$i]) && $images[$i]) {
+                $file = $images[$i];
+                $imageName = $file->getClientOriginalName();
+                $file->move(public_path('/services/section'), $imageName);
+            } else {
+                $imageName = $keepOldOnNoFile ? ($oldImages[$i] ?? null) : null;
+            }
+
+            // section header image
+            if (isset($headerImages[$i]) && $headerImages[$i]) {
+                $file = $headerImages[$i];
+                $headerImageName = $file->getClientOriginalName();
+                $file->move(public_path('/services/section_header'), $headerImageName);
+            } else {
+                $headerImageName = $keepOldOnNoFile ? ($oldHeaderImages[$i] ?? null) : null;
+            }
+
+            $sections[] = [
+                'title'        => $titles[$i] ?? '',
+                'description'  => $descriptions[$i] ?? '',
+                'image'        => $imageName,
+                'alt_text'     => $altTexts[$i] ?? '',
+                'header_image' => $headerImageName,
+            ];
+        }
+
+        return $sections;
     }
 }

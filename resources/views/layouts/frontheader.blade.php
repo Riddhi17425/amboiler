@@ -17,7 +17,7 @@
     <meta property="og:image:height" content="627">
     <meta property="og:locale" content="en_US">
 
-    @if(request()->is('privacy-policy') || request()->is('terms-conditions') || request()->is('register') || request()->is('login') || request()->is('thank-you'))
+    @if(request()->is('privacy-policy') || request()->is('thanks-for-applying') || request()->is('terms-conditions') || request()->is('register') || request()->is('login') || request()->is('thank-you'))
         <meta name="robots" content="noindex, nofollow">
     @else
         <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"/>

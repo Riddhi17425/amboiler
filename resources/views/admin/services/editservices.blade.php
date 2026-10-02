@@ -32,7 +32,7 @@
                                 <option value="without" {{ !$data->category_id ? 'selected' : '' }}>Without Category</option>
                             </select>
                         </div>
-                        
+
                         <div class="col-md-6" id="categoryDropdown">
                             <label class="form-label">Category</label>
                             <select name="category_id" class="form-control">
@@ -44,7 +44,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label">Product Name</label>
                             <input type="text" id="product_name" name="product_name"  value="{{ $data->product_name }}" class="form-control">
@@ -61,7 +61,7 @@
                                 <div class="row g-3 align-items-center">
                                     <div class="col-md-12">
                                         <label class="form-label" for="input-file-front">Image Upload</label>
-                                        <input type="file" id="input-file-front" name="product_image" class="dropify"  
+                                        <input type="file" id="input-file-front" name="product_image" class="dropify"
                                             data-default-file="{{ asset('public/services/product/' . $data->product_image) }}">
                                     </div>
                                     @if ($errors->has('product_image'))
@@ -78,7 +78,7 @@
                                 <div class="row g-3 align-items-center">
                                     <div class="col-md-12">
                                         <label class="form-label" for="input-file-front">Image Upload</label>
-                                        <input type="file" id="input-file-front" name="service_home_image" class="dropify"  
+                                        <input type="file" id="input-file-front" name="service_home_image" class="dropify"
                                             data-default-file="{{ asset('public/services/service_home_image/' . $data->service_home_image) }}">
                                     </div>
                                     @if ($errors->has('service_home_image'))
@@ -95,7 +95,7 @@
                                 <div class="row g-3 align-items-center">
                                     <div class="col-md-12">
                                         <label class="form-label" for="input-file-front">Header Image Upload</label>
-                                        <input type="file" id="input-file-front" name="header_image" class="dropify"  
+                                        <input type="file" id="input-file-front" name="header_image" class="dropify"
                                             data-default-file="{{ asset('public/services/header/' . $data->header_image) }}">
                                     </div>
                                     @if ($errors->has('header_image'))
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="card mb-3">
                             <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                 <h6 class="mb-0 fw-bold">Service Image</h6>
@@ -113,7 +113,7 @@
                                 <div class="row g-3 align-items-center">
                                     <div class="col-md-12">
                                         <label class="form-label" for="input-file-front">Service Image Upload</label>
-                                        <input type="file" id="input-file-front" name="service_image" class="dropify"  
+                                        <input type="file" id="input-file-front" name="service_image" class="dropify"
                                             data-default-file="{{ asset('public/services/service/' . $data->service_image) }}">
                                     </div>
                                     @if ($errors->has('service_image'))
@@ -130,10 +130,6 @@
                             <label class="form-label">Main Title</label>
                             <input type="text" id="main_title" name="main_title"  value="{{ $data->main_title }}" class="form-control">
                         </div>
-                        <!--<div class="col-md-6">-->
-                        <!--    <label for="dtextate" class="form-label">Footer Title</label>-->
-                        <!--    <input type="text" id="footer_title" name="footer_title" value="{{ $data->footer_title }}" class="form-control">-->
-                        <!--</div>-->
                         <div class="col-md-12">
                             <label for="description" class="form-label">Description</label>
                             <textarea id="description" name="description" class="form-control">{{$data->description}}</textarea>
@@ -171,13 +167,13 @@
                                     @foreach($sliders as $index => $slider)
                                         <div class="slider-group border p-3 mb-3 position-relative">
                                             <input type="hidden" name="old_slider_image[]" value="{{ $slider['image'] ?? '' }}">
-                            
+
                                             <div class="mb-3">
                                                 <label class="form-label">Slider Image</label>
                                                 <input type="file" name="slider_image[]" class="form-control dropify"
                                                        data-default-file="{{ asset('public/services/sliders/' . $slider['image']) }}">
                                             </div>
-                            
+
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label class="form-label">Slider Title</label>
@@ -190,7 +186,7 @@
                                                            value="{{ $slider['alt_tag'] ?? '' }}">
                                                 </div>
                                             </div>
-                            
+
                                             <div class="col-md-12 mt-2">
                                                 <button type="button" class="btn btn-success add-btn">Add</button>
                                                 <button type="button" class="btn btn-danger remove-btn">Remove</button>
@@ -203,7 +199,7 @@
                                             <label class="form-label">Slider Image</label>
                                             <input type="file" name="slider_image[]" class="form-control">
                                         </div>
-                            
+
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Slider Title</label>
@@ -223,68 +219,83 @@
                                 @endif
                             </div>
 
+                            {{-- ============================================================ --}}
+                            {{-- DYNAMIC SECTIONS (unlimited, Add More / Remove)                --}}
+                            {{-- Fallback: agar naya `sections` column khaali hai (purana data   --}}
+                            {{-- section1/section2/section3 me hai), to usse yahin convert       --}}
+                            {{-- karke dikha rahe hain taaki purani services bhi turant dikhein.  --}}
+                            {{-- ============================================================ --}}
                             @php
-                                $section1 = $data->section1 ?? [];
-                                $section2 = $data->section2 ?? [];
-                                $section3 = $data->section3 ?? [];
+                                $sections = $data->sections;
+                                if (empty($sections)) {
+                                    $sections = [];
+                                    foreach (['section1', 'section2', 'section3'] as $legacyKey) {
+                                        $legacy = $data->{$legacyKey} ?? null;
+                                        if (!empty($legacy) && (!empty($legacy['title']) || !empty($legacy['description']) || !empty($legacy['image']))) {
+                                            $sections[] = [
+                                                'title'        => $legacy['title'] ?? '',
+                                                'description'  => $legacy['description'] ?? '',
+                                                'image'        => $legacy['image'] ?? null,
+                                                'alt_text'     => $legacy['alt_text'] ?? '',
+                                                'header_image' => null,
+                                            ];
+                                        }
+                                    }
+                                }
+                                if (empty($sections)) {
+                                    // guarantee at least one empty section block shows up
+                                    $sections = [[
+                                        'title' => '', 'description' => '', 'image' => null,
+                                        'alt_text' => '', 'header_image' => null,
+                                    ]];
+                                }
                             @endphp
 
-                            {{-- Section 1 --}}
                             <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h6 class="mb-0 fw-bold">Section 1</h6>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Title</label>
-                                <input type="text" name="section1_title" class="form-control" value="{{ $section1['title'] ?? '' }}">
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Description</label>
-                                <textarea id="section1_description" name="section1_description" class="form-control">{{ $section1['description'] ?? '' }}</textarea>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Image</label>
-                                <input type="file" name="section1_image" class="dropify"
-                                    data-default-file="{{ isset($section1['image']) ? asset('public/services/section1/' . $section1['image']) : '' }}">
+                                <h6 class="mb-0 fw-bold">Sections</h6>
                             </div>
 
-                            {{-- Section 2 --}}
-                            <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h6 class="mb-0 fw-bold">Section 2</h6>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Title</label>
-                                <input type="text" name="section2_title" class="form-control" value="{{ $section2['title'] ?? '' }}">
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Description</label>
-                                <textarea id="section2_description" name="section2_description" class="form-control">{{ $section2['description'] ?? '' }}</textarea>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Image</label>
-                                <input type="file" name="section2_image" class="dropify"
-                                    data-default-file="{{ isset($section2['image']) ? asset('public/services/section2/' . $section2['image']) : '' }}">
+                            <div id="section-container">
+                                @foreach($sections as $index => $section)
+                                    <div class="row section-group border rounded p-3 mb-3 mx-0">
+                                        <div class="col-md-12">
+                                            <span class="badge bg-secondary mb-2 section-number">Section {{ $index + 1 }}</span>
+                                        </div>
+
+                                        <input type="hidden" name="old_section_image[]" value="{{ $section['image'] ?? '' }}">
+                                        <input type="hidden" name="old_section_header_image[]" value="{{ $section['header_image'] ?? '' }}">
+
+                                        <div class="col-md-12">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" name="section_title[]" class="form-control" value="{{ $section['title'] ?? '' }}">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">Description</label>
+                                            <textarea name="section_description[]" class="form-control section-editor">{{ $section['description'] ?? '' }}</textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Image</label>
+                                            <input type="file" name="section_image[]" class="form-control dropify"
+                                                data-default-file="{{ !empty($section['image']) ? asset('public/services/section/' . $section['image']) : '' }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Image Alt Text</label>
+                                            <input type="text" name="section_alt_text[]" class="form-control" value="{{ $section['alt_text'] ?? '' }}">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">Header Image</label>
+                                            <input type="file" name="section_header_image[]" class="form-control dropify"
+                                                data-default-file="{{ !empty($section['header_image']) ? asset('public/services/section_header/' . $section['header_image']) : '' }}">
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <button type="button" class="btn btn-success section-add-btn">Add More</button>
+                                            <button type="button" class="btn btn-danger section-remove-btn" {{ count($sections) <= 1 ? 'disabled' : '' }}>Remove</button>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
 
-                            {{-- Section 3 --}}
-                            <div class="card-header py-3 p-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                                <h6 class="mb-0 fw-bold">Section 3</h6>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Title</label>
-                                <input type="text" name="section3_title" class="form-control" value="{{ $section3['title'] ?? '' }}">
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Description</label>
-                                <textarea id="section3_description" name="section3_description" class="form-control">{{ $section3['description'] ?? '' }}</textarea>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Image</label>
-                                <input type="file" name="section3_image" class="dropify"
-                                    data-default-file="{{ isset($section3['image']) ? asset('public/services/section3/' . $section3['image']) : '' }}">
-                            </div>
-                            
-                            
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
@@ -308,117 +319,47 @@
 <script src="https://cdn.jsdelivr.net/npm/dropify/dist/js/dropify.min.js"></script>
 
 <script>
+function summernoteToolbar() {
+    return [
+        ['style', ['style']],
+        ['font', ['bold', 'italic', 'underline', 'clear']],
+        ['fontname', ['fontname']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']],
+        ['insert', ['link', 'picture', 'hr']],
+        ['view', ['fullscreen', 'codeview']],
+        ['help', ['help']]
+    ];
+}
+
 $(document).ready(function() {
     $('.dropify').dropify();
+
     $('#description,#cta_description,#product_description').summernote({
         placeholder: 'Enter Description here...',
         height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#section1_description,#section2_description,#section3_description').summernote({
-        placeholder: 'Enter Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#short_description',).summernote({
-        placeholder: 'Enter News Short Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#detail_description').summernote({
-        placeholder: 'Enter News Short Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    
-    $('#cta_image_text').summernote({
-        placeholder: 'Enter News CTA Description here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
-    });
-    $('#conclusion').summernote({
-        placeholder: 'Enter Conclusion  here...',
-        height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
+        toolbar: summernoteToolbar()
     });
     $('#meta_description').summernote({
         placeholder: 'Enter Meta Description here...',
         height: 300,
-        toolbar: [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
-        ]
+        toolbar: summernoteToolbar()
+    });
+
+    // Init summernote on every existing section's description (edit page can have many)
+    $('.section-editor').each(function () {
+        $(this).summernote({
+            placeholder: 'Enter Section Description here...',
+            height: 250,
+            toolbar: summernoteToolbar()
+        });
     });
 });
 </script>
+
 <script>
+    // ---- Slider Image And Title (unchanged) ----
     $(document).ready(function () {
         function getSliderHtml() {
             return `
@@ -446,12 +387,10 @@ $(document).ready(function() {
             </div>`;
         }
 
-        // Add new slider
         $('#slider-container').on('click', '.add-btn', function () {
             $('#slider-container').append(getSliderHtml());
         });
 
-        // Remove slider
         $('#slider-container').on('click', '.remove-btn', function () {
             if ($('.slider-group').length > 1) {
                 $(this).closest('.slider-group').remove();
@@ -459,6 +398,80 @@ $(document).ready(function() {
         });
     });
 </script>
+
+<script>
+    // ---- DYNAMIC SECTIONS: Add More / Remove ----
+    $(document).ready(function () {
+        function renumberSections() {
+            $('#section-container .section-group').each(function (index) {
+                $(this).find('.section-number').text('Section ' + (index + 1));
+            });
+        }
+
+        function blankSectionHtml() {
+            return `
+            <div class="row section-group border rounded p-3 mb-3 mx-0">
+                <div class="col-md-12">
+                    <span class="badge bg-secondary mb-2 section-number">Section</span>
+                </div>
+                <input type="hidden" name="old_section_image[]" value="">
+                <input type="hidden" name="old_section_header_image[]" value="">
+                <div class="col-md-12">
+                    <label class="form-label">Title</label>
+                    <input type="text" name="section_title[]" class="form-control">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Description</label>
+                    <textarea name="section_description[]" class="form-control section-editor"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Image</label>
+                    <input type="file" name="section_image[]" class="form-control dropify">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Image Alt Text</label>
+                    <input type="text" name="section_alt_text[]" class="form-control">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Header Image</label>
+                    <input type="file" name="section_header_image[]" class="form-control dropify">
+                </div>
+                <div class="col-md-12 mt-2">
+                    <button type="button" class="btn btn-success section-add-btn">Add More</button>
+                    <button type="button" class="btn btn-danger section-remove-btn">Remove</button>
+                </div>
+            </div>`;
+        }
+
+        $(document).on('click', '.section-add-btn', function () {
+            var $newGroup = $(blankSectionHtml());
+            $('#section-container').append($newGroup);
+
+            $newGroup.find('.dropify').dropify();
+            $newGroup.find('.section-editor').summernote({
+                placeholder: 'Enter Section Description here...',
+                height: 250,
+                toolbar: summernoteToolbar()
+            });
+
+            $('#section-container .section-remove-btn').prop('disabled', false);
+            renumberSections();
+        });
+
+        $(document).on('click', '.section-remove-btn', function () {
+            var $groups = $('#section-container .section-group');
+            if ($groups.length > 1) {
+                $(this).closest('.section-group').find('.section-editor').summernote('destroy');
+                $(this).closest('.section-group').remove();
+                if ($('#section-container .section-group').length === 1) {
+                    $('#section-container .section-remove-btn').prop('disabled', true);
+                }
+                renumberSections();
+            }
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function () {
         $('#withorwithout').on('change', function () {
@@ -470,10 +483,8 @@ $(document).ready(function() {
             }
         });
 
-        // Trigger initially based on pre-filled value
         $('#withorwithout').trigger('change');
     });
 </script>
-
 
 @endpush
