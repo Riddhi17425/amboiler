@@ -11,7 +11,7 @@ use App\Http\Controllers\admin\BlogsController;
 use App\Http\Controllers\admin\ProcessController;
 use App\Http\Controllers\admin\MilestoneController;
 use App\Http\Controllers\admin\ServiceCategoryController;
-use App\Http\Controllers\admin\ServiceController;
+// use App\Http\Controllers\admin\ServiceController;
 use App\Http\Controllers\admin\JobCategoryController;
 use App\Http\Controllers\admin\JobController;
 
@@ -21,6 +21,7 @@ use App\Http\Controllers\admin\ProjectCategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\admin\ServicesController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\SitemapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,11 @@ Route::get('/clear-all-cache', function() {
     Artisan::call('optimize:clear');
     return 'All caches cleared successfully';
 });
+
+// START - SITEMAP DYNAMIC
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+// END - SITEMAP DYNAMIC
+
 Route::get('/landing', [DashboardController::class,'landing'])->name('landing');
 
 Route::get('/', [DashboardController::class,'Index'])->name('index');
@@ -89,7 +95,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('admin/others', ProcessController::class);
 	Route::resource('admin/milestone', MilestoneController::class);
     Route::resource('admin/category', ServiceCategoryController::class);
-    Route::resource('admin/service', ServiceController::class);
+    // Route::resource('admin/service', ServiceController::class);
     Route::resource('admin/jobcategory', JobCategoryController::class);
     Route::resource('admin/job', JobController::class);
     
@@ -97,7 +103,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('admin/project', ProjectController::class);
     Route::resource('admin/projectcategory', ProjectCategoryController::class);
     Route::resource('admin/services', ServicesController::class);
-    Route::get('admin/product/get-subcategories/{id}', [ProductController::class, 'getSubcategories']);
+    // Route::get('admin/product/get-subcategories/{id}', [ProductController::class, 'getSubcategories']);
     Route::prefix('backend')->group(function () {
     });
 });
