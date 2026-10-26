@@ -265,7 +265,7 @@ class DashboardController extends Controller
                 ->withHeaders([
                     'Content-Type' => 'application/json'
                 ])
-                ->post('https://script.google.com/macros/s/AKfycbxjhSdnUgShzCLkhJ6CgX02u09s8bvO4EcUyMTI4n3UwaXmfKNoAXrPL_Uv_nY6-sxZ/exec', $sheetData);
+                ->post('https://script.google.com/macros/s/AKfycbwfxHvCWeduN9gRKjviQTp684VF8Rg_1JGlcmoFY5IWVNb1lfJfA2B4ndFvBFZNp6Ai/exec', $sheetData);
     
             // Check if the request was successful
             if ($response->successful()) {
@@ -425,7 +425,7 @@ class DashboardController extends Controller
             ->withHeaders([
                 'Content-Type' => 'application/json'
             ])
-            ->post('https://script.google.com/macros/s/AKfycbxjhSdnUgShzCLkhJ6CgX02u09s8bvO4EcUyMTI4n3UwaXmfKNoAXrPL_Uv_nY6-sxZ/exec', $sheetData);
+            ->post('https://script.google.com/macros/s/AKfycbwfxHvCWeduN9gRKjviQTp684VF8Rg_1JGlcmoFY5IWVNb1lfJfA2B4ndFvBFZNp6Ai/exec', $sheetData);
 
         // Check if the request was successful
         if ($response->successful()) {
@@ -550,7 +550,7 @@ class DashboardController extends Controller
             ->withHeaders([
                 'Content-Type' => 'application/json'
             ])
-            ->post('https://script.google.com/macros/s/AKfycbxjhSdnUgShzCLkhJ6CgX02u09s8bvO4EcUyMTI4n3UwaXmfKNoAXrPL_Uv_nY6-sxZ/exec', $sheetData);
+            ->post('https://script.google.com/macros/s/AKfycbwfxHvCWeduN9gRKjviQTp684VF8Rg_1JGlcmoFY5IWVNb1lfJfA2B4ndFvBFZNp6Ai/exec', $sheetData);
 
         // Check if the request was successful
         if ($response->successful()) {

@@ -209,23 +209,23 @@
                 <div class="form_wrapper">
                     <div class="form">
                         <form id="contactform" method="post" action="{{ route('contact.submit') }}">
-                               <div class="row mb-3">
-                            <h2 class="contact_main_head">We’re Just a Message Away</h2>
-                            <p >
-                                Have a question, need assistance, or want to explore how we can collaborate? Our team is just a message away. Whether it's within office hours or beyond, we’re here for you — available 24×7 to ensure your business never stops. Reach out via phone, email, or the contact form below. We’ll respond promptly.
-                            </p>
-                        </div>
-                        <div style="position:absolute; left:-9999px; opacity:0; height:0; overflow:hidden;">
-                            <input type="text" name="website" value="" tabindex="-1" autocomplete="new-password" aria-hidden="true" >
-                        </div>
-                        @error('pot')
-                            <label class="error">{{ $message }}</label>
-                        @enderror
-                        <!--@if(session('error'))-->
-                        <!--    <div class="alert alert-danger">-->
-                        <!--        {{ session('error') }}-->
-                        <!--    </div>-->
-                        <!--@endif-->
+                            <div class="row mb-3">
+                                <h2 class="contact_main_head">We’re Just a Message Away</h2>
+                                <p >
+                                    Have a question, need assistance, or want to explore how we can collaborate? Our team is just a message away. Whether it's within office hours or beyond, we’re here for you — available 24×7 to ensure your business never stops. Reach out via phone, email, or the contact form below. We’ll respond promptly.
+                                </p>
+                            </div>
+                            <div style="position:absolute; left:-9999px; opacity:0; height:0; overflow:hidden;">
+                                <input type="text" name="website" value="" tabindex="-1" autocomplete="new-password" aria-hidden="true" >
+                            </div>
+                            @error('pot')
+                                <label class="error">{{ $message }}</label>
+                            @enderror
+                            <!--@if(session('error'))-->
+                            <!--    <div class="alert alert-danger">-->
+                            <!--        {{ session('error') }}-->
+                            <!--    </div>-->
+                            <!--@endif-->
 
                             @csrf
                             <div class="row">

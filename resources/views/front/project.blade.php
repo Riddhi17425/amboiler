@@ -102,7 +102,7 @@
         </div>
             <div class="col-lg-6">
                 <div>
-                    <form class="apply-form contact_input" id="projectform" method="post" action="{{ route('project-submit') }}" enctype="multipart/form-data">
+                    <form class="apply-form contact_input" id="projectform" method="post" action="{{ route('project.submit') }}" enctype="multipart/form-data">
                         @csrf
                         <!-- First Name and Last Name in a single row -->
                         <h4 class="sub_head mb-0">Request a Quote</h4>
