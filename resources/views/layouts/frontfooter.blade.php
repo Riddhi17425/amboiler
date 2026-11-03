@@ -144,12 +144,20 @@
     </div>
     <hr class="mt-2 mt-md-5">
     <div class="ym_container">
-        <div class="d-flex justify-content-between copyrigt_text">
-            <a href="{{ route('privacy-policy') }}" class="text-white">Privacy Policy</a>
-            <a href="{{ route('terms-condition')}}" class="text-white d-block d-md-none">Terms & Conditions</a>
-            <a class="text-white">© <?php echo date('Y'); ?> Al Mufaddal Engineering & Marine Services Co. LLC. All
-                Rights Reserved.</a>
-            <a href="{{ route('terms-condition')}}" class="text-white d-none d-md-block">Terms & Conditions</a>
+        <div class="d-flex justify-content-between copyrigt_text text-center">
+           
+            <!--<a href="{{ route('terms-condition')}}" class="text-white d-block d-md-none">Terms & Conditions</a>-->
+           <div>
+                <a class="text-white">© <?php echo date('Y'); ?> Al Mufaddal Engineering & Marine Services Co. LLC. All
+                Rights Reserved.</a> <span>|</span>                                                                        
+                
+                 <a href="https://intelliworkz.tech" class="text-white" style="font-size:12px;" target="_blanck"> Designed, Developed & Promoted by <span style="color:#cbd62b"><b>Intelliworkz</b></span></a>
+           </div>
+           
+            <div>
+                <a href="{{ route('privacy-policy') }}" class="text-white me-3 me-lg-4">Privacy Policy</a>
+                <a href="{{ route('terms-condition')}}" class="text-white">Terms & Conditions</a>
+            </div>
         </div>
     </div>
 </footer>
