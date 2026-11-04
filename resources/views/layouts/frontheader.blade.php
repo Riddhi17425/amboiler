@@ -108,6 +108,35 @@
       border-color: unset;
     }
 
+    @media (max-width: 767px) {
+      .language-select {
+        position: relative;
+        padding: .4em .5em;
+      }
+      .language-select .ml-4 {
+        margin-left: 0 !important;
+      }
+      .language-select .dropdown-wrapper {
+        position: static;
+        width: 0;
+      }
+      .language-select .dropdown-input-lan {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        opacity: 0;
+      }
+      .language-select .dropdown-list {
+        top: 120%;
+        left: auto;
+        right: 0;
+        width: 200px;
+      }
+    }
+
     .dropdown-list {
       position: absolute;
       top: 136%;
