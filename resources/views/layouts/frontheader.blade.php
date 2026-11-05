@@ -523,7 +523,7 @@
     <!-- Offcanvas -->
     <div class="offcanvas offcanvas-start header_off" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">>
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Menu</h5>
+            <p class="offcanvas-title">Menu</p>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
 
@@ -577,7 +577,7 @@
             <div class="menu-level" id="menu-services">
                 <div class="menu-header">
                     <button class="back-btn" data-back="menu-main">&lsaquo; Back</button>
-                    <h6 class="m-0">Our Services</h6>
+                    <p class="m-0">Our Services</p>
                 </div>
 
                 <div class="menu-body">
@@ -619,7 +619,7 @@
             <div class="menu-level" id="menu-{{ $category->id }}">
                 <div class="menu-header">
                     <button class="back-btn" data-back="menu-services">&lsaquo; Back</button>
-                    <h6 class="m-0">{{ $category->name }}</h6>
+                    <p class="m-0">{{ $category->name }}</p>
                 </div>
 
                 <div class="menu-body">
