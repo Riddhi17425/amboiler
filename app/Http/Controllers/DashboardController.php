@@ -24,6 +24,7 @@ use App\Models\Project;
 use App\Models\ProjectCategory;
 use App\Models\HeroSlide;
 use App\Models\Services;
+use App\Models\Enquiry;
 use App\Mail\SendContactMailToUser;
 use App\Mail\SendMarineBoilerEngineerMailToUser;
 use App\Mail\SendProjectMailToUser;
@@ -693,5 +694,101 @@ class DashboardController extends Controller
         return redirect()->back()->with('error', 'No matching service or category found.');
     }
     
+    public function EnquirySubmit(Request $request)
+        {
+            // Spam honeypot check
+            if ($request->filled('website')) {
+                return back()->withInput()->withErrors(['pot' => 'Something went wrong.']);
+            }
+
+            // Limit submits per IP
+            $key = 'enquiry-form:' . $request->ip();
+            if (RateLimiter::tooManyAttempts($key, 3)) {
+                return back()->withInput()->withErrors(['email' => 'Too many submissions. Please try again later.']);
+            }
+
+            // Block links in text
+            $noLinks = function ($attribute, $value, $fail) {
+                if ($value && preg_match('/https?:\/\/|www\./i', $value)) {
+                    $fail('Links are not allowed.');
+                }
+            };
+
+            // Validate enquiry fields
+            $validated = $request->validate([
+                'fullname'     => ['required', 'string', 'min:2', 'max:100', $noLinks],
+                'company_name' => ['required', 'string', 'max:150', $noLinks],
+                'mobile'       => ['required', 'digits_between:10,15'],
+                'email'        => ['required', 'email', 'max:100'],
+                'subject'      => ['required', 'string', 'min:3', 'max:150', $noLinks],
+                'message'      => ['nullable', 'string', 'max:100', $noLinks],
+                'form_source'  => ['nullable', 'string', 'max:50'],
+                // Captcha token required
+                'g-recaptcha-response' => ['required'],
+            ], [
+                'g-recaptcha-response.required' => 'Please verify that you are not a robot.',
+            ]);
+
+            // Verify captcha with Google
+            $secret = env('RECAPTCHA_SECRET_KEY');
+            if ($secret) {
+                $verify = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret'   => $secret,
+                    'response' => $request->input('g-recaptcha-response'),
+                    'remoteip' => $request->ip(),
+                ]);
+                if (!$verify->json('success')) {
+                    return back()->withInput()->withErrors(['g-recaptcha-response' => 'Captcha verification failed. Please try again.']);
+                }
+            }
+
+            RateLimiter::hit($key, 600);
+
+            // Save enquiry in database
+            Enquiry::create([
+                'fullname'     => $validated['fullname'],
+                'company_name' => $validated['company_name'],
+                'mobile'       => $validated['mobile'],
+                'email'        => $validated['email'],
+                'subject'      => $validated['subject'],
+                'message'      => $validated['message'] ?? null,
+                'form_type'    => 'Enquiry Pop',
+            ]);
+
+            // Data for Google Sheet
+            $sheetData = [
+                'form_type' => 'Popup Form',
+                'fullname'  => $validated['fullname'],
+                'company'   => $validated['company_name'],
+                'email'     => $validated['email'],
+                'mobile'    => $validated['mobile'],
+                'subject'   => $validated['subject'],
+                'message'   => $validated['message'] ?? '',
+                'date'      => now()->format('Y-m-d H:i:s'),
+            ];
+
+            try {
+                // Send data to Google Sheet
+                $response = Http::timeout(30)
+                    ->withHeaders(['Content-Type' => 'application/json'])
+                    ->post('https://script.google.com/macros/s/AKfycbwfxHvCWeduN9gRKjviQTp684VF8Rg_1JGlcmoFY5IWVNb1lfJfA2B4ndFvBFZNp6Ai/exec', $sheetData);
+
+                if (!$response->successful()) {
+                    Log::error('Enquiry sheet request failed', [
+                        'status' => $response->status(),
+                        'body'   => $response->body(),
+                        'email'  => $validated['email'],
+                    ]);
+                }
+            } catch (\Exception $e) {
+                // Data already saved in DB
+                Log::error('Enquiry sheet exception: ' . $e->getMessage());
+            }
+
+            // Redirect to thank you page
+            return redirect()->route('thank-you')->with('success', 'Your enquiry has been sent successfully!');
+        }
+
+
 }
 

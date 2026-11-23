@@ -167,6 +167,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
 
 <script src="{{ asset('public/front/js/main.js') }}"></script>
+
+@include('layouts.enquiry_popup')
+
 <!-- Floating WhatsApp Button -->
 <a href="https://wa.me/971529037472?text=Hi%2C%20I%20need%20boiler%20repair%20assistance"
    target="_blank" rel="noopener" class="floating-whatsapp" aria-label="Chat on WhatsApp">

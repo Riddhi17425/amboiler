@@ -82,6 +82,7 @@ Route::get('/service-detail/{url}', [DashboardController::class, 'ServiceDetails
 Route::get('/service/{url?}', [DashboardController::class, 'Service'])->name('service');
 Route::get('/search', [DashboardController::class, 'search'])->name('search');
 Route::get('login', [DashboardController::class, 'login'])->name('login');
+Route::post('enquiry/submit', [DashboardController::class, 'EnquirySubmit'])->name('enquiry.submit');
 Auth::routes();
     
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -99,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::resource('admin/service', ServiceController::class);
     Route::resource('admin/jobcategory', JobCategoryController::class);
     Route::resource('admin/job', JobController::class);
+    
     
     Route::resource('admin/heroslide', HeroSlideController::class);
     Route::resource('admin/project', ProjectController::class);
