@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="col-lg-2 col-md-3">
-                <h6 class="ft_head">Quick Links</h6>
+                <p class="ft_head">Quick Links</p>
                 <ul class="ft_menu">
                     <li><a href="{{ route('index') }}">Home</a></li>
                     <li><a href="{{ route('about')}}">About</a></li>
@@ -80,7 +80,7 @@
             @endphp
 
             <div class="col-lg-3 col-md-4 white_bd_left">
-                <h6 class="ft_head">Our Services</h6>
+                <p class="ft_head">Our Services</p>
                 <ul class="ft_menu">
                     @foreach ($categories as $category)
                         <li>
@@ -99,17 +99,13 @@
                 </ul>
             </div>
 
-
-
-
-
             <div class="col-lg-3 col-md-3 white_bd_left">
-                <h6 class="ft_head">Career</h6>
+                <p class="ft_head">Career</p>
                 <ul class="ft_menu">
                     <li><a href="{{ route('life-at-ame') }}">Life at AME</a></li>
                     <li><a href="{{ route('current-vacancies') }}">Current Vacancies</a></li>
                 </ul>
-                <h6 class="ft_head mt-4">Contact</h6>
+                <p class="ft_head mt-4">Contact</p>
                     <ul class="ft_menu">
                     <div class="ft_right_con">
                         <div class="d-flex gap-2 social-item">
@@ -144,12 +140,20 @@
     </div>
     <hr class="mt-2 mt-md-5">
     <div class="ym_container">
-        <div class="d-flex justify-content-between copyrigt_text">
-            <a href="{{ route('privacy-policy') }}" class="text-white">Privacy Policy</a>
-            <a href="{{ route('terms-condition')}}" class="text-white d-block d-md-none">Terms & Conditions</a>
-            <a class="text-white">© <?php echo date('Y'); ?> Al Mufaddal Engineering & Marine Services Co. LLC. All
-                Rights Reserved.</a>
-            <a href="{{ route('terms-condition')}}" class="text-white d-none d-md-block">Terms & Conditions</a>
+        <div class="d-flex justify-content-between copyrigt_text text-center">
+           
+            <!--<a href="{{ route('terms-condition')}}" class="text-white d-block d-md-none">Terms & Conditions</a>-->
+           <div>
+                <a class="text-white">© <?php echo date('Y'); ?> Al Mufaddal Engineering & Marine Services Co. LLC. All
+                Rights Reserved.</a> <span>|</span>                                                                        
+                
+                 <a href="https://intelliworkz.tech" class="text-white" style="font-size:12px;" target="_blanck"> Designed, Developed & Promoted by <span style="color:#cbd62b"><b>Intelliworkz</b></span></a>
+           </div>
+           
+            <div>
+                <a href="{{ route('privacy-policy') }}" class="text-white me-3 me-lg-4">Privacy Policy</a>
+                <a href="{{ route('terms-condition')}}" class="text-white">Terms & Conditions</a>
+            </div>
         </div>
     </div>
 </footer>

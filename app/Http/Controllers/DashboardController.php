@@ -467,128 +467,233 @@ class DashboardController extends Controller
         $projects = Project::all(); 
         return view('front.project', compact('meta_title','meta_description','categories','projects'));
     }
+    
+    
     public function projectstore(Request $request)
-{
-    // Validation
-    $validated = $request->validate([
-        'firstName' => [
-            'required',
-            'string',
-            'max:100',
-            // Block URLs
-            function ($attribute, $value, $fail) {
-                if (preg_match('/https?:\/\/|www\./i', $value)) {
-                    $fail('Links are not allowed.');
-                }
-            },
-            // Spam keywords
-            function ($attribute, $value, $fail) {
-                $spamWords = ['seo','crypto','viagra','casino','furniture','wholesale','упаковка','оборудование', 'Robertjaxia'];
+    {
+        // 1. RATE LIMITING
+        $key = 'project-form:' . $request->ip();
 
-                foreach ($spamWords as $word) {
-                    if (str_contains(strtolower($value), $word)) {
-                        $fail('Spam content detected.');
-                        break;
-                    }
-                }
-            },
-        ],
-        'email' => 'required|email|max:255|not_in:zekisuquc419@gmail.com',
-        'phone' => 'required|numeric',
-        'location' => 'required',
-        'subject' => 'required',
-        'message' => [
-                'nullable',
-                'string',
-                'max:100',
-                // Block URLs
-                function ($attribute, $value, $fail) {
-                    if (preg_match('/https?:\/\/|www\./i', $value)) {
-                        $fail('Links are not allowed.');
-                    }
-                },
-                // Spam keywords
-                function ($attribute, $value, $fail) {
-                    $spamWords = ['seo','crypto','viagra','casino','furniture','wholesale','упаковка','оборудование', 'Robertjaxia'];
-    
-                    foreach ($spamWords as $word) {
-                        if (str_contains(strtolower($value), $word)) {
-                            $fail('Spam content detected.');
-                            break;
-                        }
-                    }
-                },
-            ],
-        //'g-recaptcha-response' => 'required|captcha',
-    ]);
-    
-    // Save the form data to the database
-    $post = new ProjectForm;
-    $post->firstName = $request->get('firstName');
-    $post->email = $request->get('email');
-    $post->phone = $request->get('phone');
-    $post->location = $request->get('location');
-    $post->subject = $request->get('subject');
-    $post->message = $request->filled('message') ? $request->get('message') : null;
-
-    $post->save();
-    
-    // Prepare the sheet data to send to Google Sheets
-    $sheetData = [
-        'form_type' => 'Project Form', // You can change this to match the form type
-        'fullname' => $validated['firstName'], // Assuming first name is the only required field for "fullname"
-        'email' => $validated['email'],
-        'mobile' => $validated['phone'],
-        'location' => $validated['location'],
-        'subject' => $validated['subject'],
-        'message' => $validated['message'] ?? '',
-        'date' => now()->format('Y-m-d H:i:s'),
-    ];
-
-    try {
-        // Send data to Google Sheets via the API
-        $response = Http::timeout(30)
-            ->withHeaders([
-                'Content-Type' => 'application/json'
-            ])
-            ->post('https://script.google.com/macros/s/AKfycbwfxHvCWeduN9gRKjviQTp684VF8Rg_1JGlcmoFY5IWVNb1lfJfA2B4ndFvBFZNp6Ai/exec', $sheetData);
-
-        // Check if the request was successful
-        if ($response->successful()) {
-            $responseData = $response->json();
-            if (isset($responseData['status']) && $responseData['status'] === 'success') {
-                Log::info('Data successfully sent to Google Sheets', [
-                    'email' => $validated['email'],
-                    'response' => $responseData
-                ]);
-            } else {
-                Log::warning('Google Sheets API returned error', [
-                    'response' => $responseData,
-                    'email' => $validated['email']
-                ]);
-            }
-        } else {
-            Log::error('Google Sheets API request failed', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-                'email' => $validated['email']
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            return back()->withInput()->withErrors([
+                'email' => 'Too many attempts. Please try again after 10 minutes.'
             ]);
         }
 
-        // Redirect to thank you page with success message
-        return redirect()->route('thank-you')->with('success', 'Your message has been sent successfully!');
-        
-    } catch (\Exception $e) {
-        Log::error('Google Sheets API request failed: ' . $e->getMessage());
-        return back()->with('error', 'Failed to send the message. Please try again later.');
-    }
-}
+        RateLimiter::hit($key, 600);
 
+        // 2. HONEYPOT PROTECTION
+        if ($request->filled('website_url')) {
+            abort(403, 'Spam submission detected.');
+        }
+
+        // 3. SUBMISSION TIME VALIDATION
+        $formStartedAt = $request->input('form_started_at');
+
+        if (
+            !is_numeric($formStartedAt) ||
+            (time() - (int) $formStartedAt) < 3 ||
+            (time() - (int) $formStartedAt) > 7200
+        ) {
+            return back()->withInput()->withErrors([
+                'email' => 'Invalid submission. Please refresh the page and try again.'
+            ]);
+        }
+
+        // 4. SPAM KEYWORDS
+        $spamWords = [
+            'seo',
+            'crypto',
+            'viagra',
+            'casino',
+            'furniture',
+            'wholesale',
+            'упаковка',
+            'оборудование',
+            'robertjaxia',
+            'backlinks',
+            'guest post',
+            'buy traffic',
+            'online gambling',
+            'forex trading',
+            'payday loan',
+            'adult content',
+            'porn',
+        ];
+
+
+        // 5. COMMON SPAM VALIDATION
+        $checkSpam = function ($attribute, $value, $fail) use ($spamWords) {
+
+            if (preg_match('/https?:\/\/|www\.|[a-z0-9-]+\.(com|net|org|xyz|top|ru|info)\b/i', $value)) {
+                $fail('Links are not allowed.');
+                return;
+            }
+
+            foreach ($spamWords as $word) {
+                if (stripos($value, $word) !== false) {
+                    $fail('Spam content detected.');
+                    return;
+                }
+            }
+        };
+
+        // 6. FIELD VALIDATION
+        $validated = $request->validate([
+
+            'firstName' => [
+                'required',
+                'string',
+                'min:2',
+                'max:70',
+                'regex:/^[a-zA-Z\s]+$/',
+                $checkSpam,
+            ],
+
+            'email' => [
+                'required',
+                'email:rfc',
+                'max:255',
+                'not_in:zekisuquc419@gmail.com',
+            ],
+
+            'phone' => [
+                'required',
+                'regex:/^[0-9]{10,15}$/',
+            ],
+
+            'location' => [
+                'required',
+                'string',
+                'max:8',
+                'regex:/^[a-zA-Z0-9\s,-]+$/',
+                $checkSpam,
+            ],
+
+            'subject' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                $checkSpam,
+            ],
+
+            'message' => [
+                'nullable',
+                'string',
+                'max:100',
+                $checkSpam,
+            ],
+
+            'website_url' => [
+                'nullable',
+                'max:0',
+            ],
+
+            'form_started_at' => [
+                'required',
+                'numeric',
+            ],
+
+        ], [
+            'firstName.regex' => 'Please enter a valid name.',
+            'firstName.min' => 'Name must contain at least 2 characters.',
+            'phone.regex' => 'Phone number must contain 10 to 15 digits.',
+            'location.regex' => 'Please enter a valid location.',
+        ]);
+
+        // 7. DUPLICATE ENQUIRY PROTECTION
+        $duplicate = ProjectForm::where('email', $validated['email'])
+            ->where('phone', $validated['phone'])
+            ->where('subject', $validated['subject'])
+            ->where('created_at', '>=', now()->subMinutes(10))
+            ->exists();
+
+        if ($duplicate) {
+            return back()->withInput()->withErrors([
+                'email' => 'You have already submitted this enquiry. Please try again later.'
+            ]);
+        }
+
+        // 8. SAVE DATABASE
+        $post = new ProjectForm;
+
+        $post->firstName = $validated['firstName'];
+        $post->email = $validated['email'];
+        $post->phone = $validated['phone'];
+        $post->location = $validated['location'];
+        $post->subject = $validated['subject'];
+        $post->message = $validated['message'] ?? null;
+
+        $post->save();
+
+        // 9. GOOGLE SHEETS INTEGRATION
+        $sheetData = [
+            'form_type' => 'Project Form',
+            'fullname' => $validated['firstName'],
+            'email' => $validated['email'],
+            'mobile' => $validated['phone'],
+            'location' => $validated['location'],
+            'subject' => $validated['subject'],
+            'message' => $validated['message'] ?? '',
+            'date' => now()->format('Y-m-d H:i:s'),
+        ];
+
+        try {
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'Content-Type' => 'application/json'
+                ])
+                ->post(
+                    'https://script.google.com/macros/s/AKfycbwfxHvCWeduN9gRKjviQTp684VF8Rg_1JGlcmoFY5IWVNb1lfJfA2B4ndFvBFZNp6Ai/exec',
+                    $sheetData
+                );
+
+            if ($response->successful()) {
+
+                $responseData = $response->json();
+
+                if (
+                    isset($responseData['status']) &&
+                    $responseData['status'] === 'success'
+                ) {
+
+                    Log::info('Project enquiry sent to Google Sheets', [
+                        'email' => $validated['email']
+                    ]);
+
+                } else {
+
+                    Log::warning('Google Sheets API returned error', [
+                        'response' => $responseData
+                    ]);
+                }
+
+            } else {
+
+                Log::error('Google Sheets request failed', [
+                    'status' => $response->status(),
+                    'email' => $validated['email']
+                ]);
+            }
+
+            return redirect()
+                ->route('thank-you')
+                ->with('success', 'Your message has been sent successfully!');
+
+        } catch (\Exception $e) {
+
+            Log::error('Google Sheets API request failed: ' . $e->getMessage());
+
+            return back()->with(
+                'error',
+                'Failed to send the message. Please try again later.'
+            );
+        }
+    }
 
     public function Service($url = null)
-    {   
-       
-    
+    {      
         $categories = ServiceCategory::whereNull('deleted_at')->where('url',$url)->first();
         
         $meta_title = $categories->meta_title;
@@ -654,6 +759,7 @@ class DashboardController extends Controller
         $meta_description = $service->meta_description;
         return view('front.service-detail', compact('meta_title', 'meta_description', 'service', 'categories', 'relatedServices'));
     }
+
     public function CategoryServices($id)
     {
         $category = DB::table('service_category')->find($id);

@@ -1289,9 +1289,27 @@
         <div class="row justify-content-between align-items-center">
             <div class="col-lg-6 mb-3 mb-md-0">
                 <div>
+
                     <form class="apply-form contact_input" id="projectform" method="post"
                         action="{{ route('project.submit') }}" enctype="multipart/form-data">
                         @csrf
+
+                        <!-- Honeypot Protection -->
+                        <div style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
+                            <label for="website_url">Website</label>
+                            <input type="text"
+                                name="website_url"
+                                id="website_url"
+                                value=""
+                                tabindex="-1"
+                                autocomplete="off">
+                        </div>
+
+                        <!-- Form Submission Time -->
+                        <input type="hidden"
+                            name="form_started_at"
+                            value="{{ time() }}">
+
                         <!-- First Name and Last Name in a single row -->
                         <h4 class="sub_head mb-0">Request a Quote</h4>
                         <div class="form">
@@ -1359,6 +1377,7 @@
                             </button>
                         </div>
                     </form>
+
                 </div>
             </div>
             <div class="col-lg-6">
